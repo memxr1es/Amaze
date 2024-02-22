@@ -8,5 +8,6 @@
 import Foundation
 
 class UserViewModel: ObservableObject {
-    @Published var user = User(firstName: "Никита", userPhoto: ["user-avatar"], age: 21, birthDay: Date.now, gender: .male)
+    @Published var user = User(firstName: "Никита", userPhoto: ["user-avatar"], age: 21, birthDay: Date.now, gender: .male, about: "Есть что-то во мне особенное...", purpose: .fun)
 }
+
