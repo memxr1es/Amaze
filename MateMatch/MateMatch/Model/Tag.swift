@@ -28,4 +28,19 @@ enum Tags: String, CaseIterable {
     var id: Int {
         return Tags.allCases.firstIndex(of: self) ?? 0
     }
+    
+    var icon: String {
+        switch self {
+            case .dota: return "dota2"
+            case .counterStrike: return "counter-strike"
+            case .apexLegends: return "apex-legends"
+            case .leagueOfLegends: return "league-of-legends"
+            case .minecraft: return "minecraft"
+            case .rocketLeague: return "rocket-league"
+            case .phasmofobia: return "phasmofobia"
+            case .backrooms: return "backrooms"
+            case .brawlStars: return "brawl-stars"
+            case .standoff: return "standoff"
+        }
+    }
 }

@@ -20,6 +20,10 @@ struct OverviewProfileView: View {
                 if userVM.user.about != nil {
                     bio
                 }
+                
+                if userVM.user.game != nil {
+                    games
+                }
             }
             .padding(.top, 80)
         }
@@ -100,6 +104,42 @@ struct OverviewProfileView: View {
         .foregroundStyle(.black)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
+    }
+    
+    var games: some View {
+        VStack(alignment: .leading) {
+            Text("Игры")
+                .font(.system(size: 20, weight: .semibold, design: .rounded))
+        
+            TagLayout(alignment: .leading, spacing: 10) {
+                ForEach(userVM.user.game!, id: \.self) { tag in
+                    listTag(tag)
+                }
+            }
+        }
+        .foregroundStyle(.black)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+    }
+    
+    @ViewBuilder
+    func listTag(_ tag: Tags) -> some View {
+        HStack {
+            Image(uiImage: UIImage(named: tag.icon)!)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 20, height: 20)
+            
+            Text(tag.rawValue)
+        }
+        .font(.system(size: 14, weight: .medium, design: .rounded))
+        .fixedSize()
+        .foregroundStyle(.black.opacity(0.7))
+        .padding(8)
+        .background {
+            RoundedRectangle(cornerRadius: 7)
+                .fill(Color.theme.accentColor)
+        }
     }
 }
 
