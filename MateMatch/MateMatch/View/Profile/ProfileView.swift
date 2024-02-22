@@ -123,6 +123,10 @@ struct ProfileView: View {
                 DetailedPremiumView(path: $path)
                     .navigationBarBackButtonHidden()
                     .environmentObject(sections)
+            } else if navPath == "Profile Overview" {
+                OverviewProfileView(path: $path)
+                    .navigationBarBackButtonHidden()
+                    .environmentObject(userVM)
             }
         }
     }
@@ -153,36 +157,38 @@ struct ProfileView: View {
     
     var profileSection: some View {
         VStack {
-            HStack(spacing: 15) {
-                Image("user-avatar")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 80, height: 80)
-                    .clipShape(Circle())
-                
-                
-                VStack(alignment: .leading, spacing: 5) {
-                    HStack {
-                        Text("Никита")
-                            .font(.system(size: 26, weight: .semibold, design: .rounded))
-                            .foregroundStyle(.black)
-                        
-                        Image(systemName: testSystem ? "checkmark.seal.fill" : "checkmark.seal")
-                            .foregroundStyle(testSystem ? .blue : Color(.systemGray))
-                            .frame(width: 20, height: 20)
-                            .onTapGesture {
-                                withAnimation { testSystem.toggle() }
-                            }
-                    }
+            NavigationLink(value: "Profile Overview") {
+                HStack(spacing: 15) {
+                    Image("user-avatar")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 80, height: 80)
+                        .clipShape(Circle())
                     
-                    Text("21, Рыбное")
-                        .font(.system(size: 14, design: .rounded))
-                        .foregroundStyle(Color(.systemGray2))
+                    
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Text("Никита")
+                                .font(.system(size: 26, weight: .semibold, design: .rounded))
+                                .foregroundStyle(.black)
+                            
+                            Image(systemName: testSystem ? "checkmark.seal.fill" : "checkmark.seal")
+                                .foregroundStyle(testSystem ? .blue : Color(.systemGray))
+                                .frame(width: 20, height: 20)
+                                .onTapGesture {
+                                    withAnimation { testSystem.toggle() }
+                                }
+                        }
+                        
+                        Text("21, Рыбное")
+                            .font(.system(size: 14, design: .rounded))
+                            .foregroundStyle(Color(.systemGray2))
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                .padding(.top)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal)
-            .padding(.top)
             
             HStack {
                 buttonProfile(icon: "pencil.and.scribble", text: "Изменить", alignment: false)

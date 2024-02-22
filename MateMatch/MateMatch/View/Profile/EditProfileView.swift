@@ -288,7 +288,7 @@ struct EditProfileView: View {
             
             HStack {
                 Button {
-                    dismiss()
+                    path.removeAll()
                 }
                 label: {
                     Image(systemName: "chevron.left")
@@ -320,10 +320,12 @@ struct EditProfileView: View {
                 
                 Spacer()
                 
-                Text("Просмотр")
-                    .font(.system(size: 14))
-                    .foregroundStyle(Color(.systemGray))
-                    .padding(.trailing)
+                NavigationLink(value: "Profile Overview") {
+                    Text("Просмотр")
+                        .font(.system(size: 14))
+                        .foregroundStyle(Color(.systemGray))
+                        .padding(.trailing)
+                }
             }
         }
         .frame(maxHeight: .infinity, alignment: .top)

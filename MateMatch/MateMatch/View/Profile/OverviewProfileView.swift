@@ -11,7 +11,7 @@ struct OverviewProfileView: View {
     
     @Binding var path: [String]
     
-    @StateObject var userVM = UserViewModel()
+    @EnvironmentObject var userVM: UserViewModel
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -26,10 +26,13 @@ struct OverviewProfileView: View {
                 }
             }
             .padding(.top, 80)
+            .padding(.bottom, 100)
         }
+        .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.theme.bgColor)
         .overlay(header)
+        .overlay(editButton)
     }
     
     var header: some View {
@@ -39,7 +42,7 @@ struct OverviewProfileView: View {
                 .foregroundStyle(.black)
                 .padding(.leading)
                 .onTapGesture {
-                    path.removeAll(where: { $0 == "Main Section" })
+                    path.removeAll(where: { $0 == "Profile Overview" })
                 }
             
             Spacer()
@@ -122,6 +125,28 @@ struct OverviewProfileView: View {
         .padding()
     }
     
+    var editButton: some View {
+        NavigationLink(value: "Edit Profile") {
+            HStack {
+                Text("Изменить")
+                    .font(.system(size: 16, design: .monospaced))
+                
+                Image(uiImage: UIImage(named: "edit")!)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 20, height: 20)
+            }
+            .padding(15)
+            .background {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(.black)
+            }
+            .foregroundStyle(.white)
+            .padding()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+    }
+    
     @ViewBuilder
     func listTag(_ tag: Tags) -> some View {
         HStack {
@@ -134,7 +159,7 @@ struct OverviewProfileView: View {
         }
         .font(.system(size: 14, weight: .medium, design: .rounded))
         .fixedSize()
-        .foregroundStyle(.black.opacity(0.7))
+        .foregroundStyle(.black.opacity(0.5))
         .padding(8)
         .background {
             RoundedRectangle(cornerRadius: 7)
@@ -144,5 +169,5 @@ struct OverviewProfileView: View {
 }
 
 #Preview {
-    OverviewProfileView(path: .constant([]))
+    MainView()
 }
