@@ -62,7 +62,7 @@ struct ChangeMainInfoView: View {
             .sheet(isPresented: $showDatePicker) {
                 CarouselCalendar(currentDate: $newValue, currentDateUser: $newValueDate, showDatePicker: $showDatePicker)
                     .padding(.top, 40)
-                    .presentationDetents([.fraction(0.3)])
+                    .presentationDetents([.fraction(0.35)])
             }
         }
         .onAppear {
@@ -254,6 +254,8 @@ struct ChangeMainInfoView: View {
                     userVM.user.gender = selectedGender
                     print("ready#3")
             }
+            
+            path.removeAll(where: { $0 == "Main Section" })
         } label: {
             Text("Подтвердить")
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
@@ -302,6 +304,5 @@ struct ConfirmButton: PrimitiveButtonStyle {
 }
 
 #Preview {
-    ChangeMainInfoView(path: .constant([]))
-        .environmentObject(SectionsViewModel())
+    MainView()
 }
