@@ -70,7 +70,7 @@ struct OverviewProfileView: View {
         Image(userVM.user.userPhoto.first!)
             .resizable()
             .scaledToFill()
-            .frame(height: 500)
+            .frame(height: 450)
             .clipShape(RoundedRectangle(cornerRadius: 15))
             .padding(.horizontal, 10)
             .overlay {
@@ -82,11 +82,11 @@ struct OverviewProfileView: View {
                     
                     HStack {
                         Image(systemName: userVM.user.purpose?.icon ?? "")
-                            .font(.system(size: 20))
+                            .font(.system(size: 18))
                             .foregroundStyle(.white)
                         
                         Text(userVM.user.purpose?.rawValue ?? "")
-                            .font(.system(size: 18))
+                            .font(.system(size: 14))
                             .foregroundStyle(.white)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
