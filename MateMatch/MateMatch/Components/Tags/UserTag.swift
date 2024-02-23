@@ -9,21 +9,29 @@ import SwiftUI
 
 struct UserTag: View {
     
-    let nameOfGame: String
+    let tag: Tags
     
     var body: some View {
-        Text(nameOfGame)
-            .font(.system(size: 14, weight: .medium, design: .rounded))
-            .fixedSize()
-            .foregroundStyle(.white.opacity(1))
-            .padding(5)
-            .background {
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(.gray.opacity(0.5))
-            }
+        HStack {
+            Image(uiImage: UIImage(named: tag.icon)!)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 20, height: 20)
+                .foregroundStyle(.white)
+            
+            Text(tag.rawValue)
+                .font(.system(size: 14, weight: .medium, design: .rounded))
+                .fixedSize()
+                .foregroundStyle(.white.opacity(1))
+        }
+        .padding(5)
+        .background {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(.gray.opacity(0.5))
+        }
     }
 }
 
 #Preview {
-    UserTag(nameOfGame: "")
+    UserTag(tag: .apexLegends)
 }
