@@ -17,7 +17,7 @@ struct OverviewProfileView: View {
         ScrollView(showsIndicators: false) {
             VStack {
                 userPhoto
-                if userVM.user.about != nil {
+                if !userVM.user.about.isEmpty {
                     bio
                 }
                 
@@ -101,7 +101,7 @@ struct OverviewProfileView: View {
             Text("Био")
                 .font(.system(size: 20, weight: .semibold, design: .rounded))
             
-            Text(userVM.user.about ?? "")
+            Text(userVM.user.about)
                 .font(.system(size: 14))
         }
         .foregroundStyle(.black)

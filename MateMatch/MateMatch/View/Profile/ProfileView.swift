@@ -91,6 +91,7 @@ struct ProfileView: View {
             if navPath == "Edit Profile" {
                 EditProfileView(path: $path)
                     .navigationBarBackButtonHidden()
+                    .environmentObject(userVM)
             } else if navPath == "First Step" {
                 VerificationView(path: $path)
                     .navigationBarBackButtonHidden()

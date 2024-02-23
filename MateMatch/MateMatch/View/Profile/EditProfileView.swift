@@ -10,7 +10,6 @@ import NavigationTransitions
 
 struct EditProfileView: View {
     
-    @State private var editText: String = ""
     @State private var placeholder: String = "Напиши немного о себе"
     
     @FocusState private var isFocused: Bool
@@ -26,6 +25,7 @@ struct EditProfileView: View {
     @Binding var path: [String]
     
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var userVM: UserViewModel
     
     let columns = [GridItem(.fixed(40), alignment: .top), GridItem(.flexible(), alignment: .leading), GridItem(.fixed(30), alignment: .center)]
     
@@ -44,6 +44,7 @@ struct EditProfileView: View {
         .scrollIndicators(.hidden)
         .sheet(isPresented: $showChoice) {
             ChoicePurpose()
+                .environmentObject(userVM)
                 .presentationDetents([.fraction(0.8)])
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -84,14 +85,14 @@ struct EditProfileView: View {
                 
                 Spacer()
                 
-                Text(editText.isEmpty ? "+8%" : "\(typedCharacters) / \(characterLimit)")
+                Text(userVM.user.about.isEmpty ? "+8%" : "\(typedCharacters) / \(characterLimit)")
                     .font(.system(size: 16, design: .rounded))
                     .foregroundStyle(.gray)
             }
             .padding()
             
             ZStack(alignment: .leading) {
-                if editText.isEmpty {
+                if userVM.user.about.isEmpty {
                     TextEditor(text: $placeholder)
                         .font(.system(size: 20, design: .rounded))
                         .foregroundStyle(.gray)
@@ -101,15 +102,20 @@ struct EditProfileView: View {
                         .background(.white)
                 }
                 
-                TextEditor(text: $editText)
+                TextEditor(text: $userVM.user.about)
                     .font(.system(size: 20, design: .rounded))
                     .foregroundStyle(.black)
-                    .opacity(editText.isEmpty ? 0.25 : 1)
+                    .opacity(userVM.user.about.isEmpty ? 0.25 : 1)
                     .padding(5)
                     .focused($isFocused)
-                    .limitText($editText, to: characterLimit)
-                    .onChange(of: editText) { _ , _ in
-                        typedCharacters = editText.count
+                    .limitText($userVM.user.about, to: characterLimit)
+                    .onChange(of: userVM.user.about) { _ , _ in
+                        typedCharacters = userVM.user.about.count
+                    }
+                    .onAppear {
+                        if !userVM.user.about.isEmpty {
+                            typedCharacters = userVM.user.about.count
+                        }
                     }
                     .scrollContentBackground(.hidden)
             }
@@ -197,38 +203,46 @@ struct EditProfileView: View {
             }
             .padding()
             
-            LazyVGrid(columns: columns, alignment: .center) {
-                Image(systemName: "bolt")
-                    .font(.system(size: 22))
-                    .foregroundStyle(.gray)
-                    .padding(.trailing, 5)
-                
-                VStack(alignment: .leading, spacing: 5) {
-                    Text("Укажи статус")
-                        .font(.system(size: 18, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.black)
-                    
-                    Text("Пользователи будут видеть")
-                        .font(.system(size: 16, design: .rounded))
+            if userVM.user.purpose == nil {
+                LazyVGrid(columns: columns, alignment: .center) {
+                    Image(systemName: "bolt")
+                        .font(.system(size: 22))
                         .foregroundStyle(.gray)
+                        .padding(.trailing, 5)
                     
-                    Text("твой статус в ленте")
-                        .font(.system(size: 16, design: .rounded))
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Укажи статус")
+                            .font(.system(size: 18, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.black)
+                        
+                        Text("Пользователи будут видеть")
+                            .font(.system(size: 16, design: .rounded))
+                            .foregroundStyle(.gray)
+                        
+                        Text("твой статус в ленте")
+                            .font(.system(size: 16, design: .rounded))
+                            .foregroundStyle(.gray)
+                    }
+                    
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 18))
                         .foregroundStyle(.gray)
                 }
-                
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 18))
-                    .foregroundStyle(.gray)
-            }
-            .padding(20)
-            .background {
-                RoundedRectangle(cornerRadius: 15)
-                    .fill(Color.theme.bgColor)
-            }
-            .padding(.horizontal)
-            .onTapGesture {
-                withAnimation { showChoice.toggle() }
+                .padding(20)
+                .background {
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(Color.theme.bgColor)
+                }
+                .onTapGesture {
+                    withAnimation { showChoice.toggle() }
+                }
+                .padding(.horizontal)
+
+            } else {
+                choicedPurpose
+                    .onTapGesture {
+                        withAnimation { showChoice.toggle() }
+                    }
             }
         }
     }
@@ -330,6 +344,34 @@ struct EditProfileView: View {
         }
         .frame(maxHeight: .infinity, alignment: .top)
     }
+    
+    var choicedPurpose: some View {
+        LazyVGrid(columns: columns) {
+            Image(systemName: userVM.user.purpose?.icon ?? "")
+                .font(.system(size: 20))
+                .foregroundStyle(.gray.opacity(0.5))
+            
+            VStack(alignment: .leading, spacing: 8) {
+                Text(userVM.user.purpose?.rawValue ?? "")
+                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.black)
+                
+                Text(userVM.user.purpose?.description ?? "")
+                    .font(.system(size: 16, design: .rounded))
+                    .foregroundStyle(.gray.opacity(0.6))
+                    .lineSpacing(5)
+            }
+        }
+        .padding()
+        .background {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(.white)
+                .shadow(color: Color.theme.bgColor, radius: 10)
+                .shadow(color: Color.theme.bgColor.opacity(0.6), radius: 10)
+                .shadow(color: Color.theme.bgColor.opacity(0.3), radius: 10)
+        }
+        .padding(.horizontal, 15)
+    }
 }
 
 struct WithoutEffectsButtonStyle: ButtonStyle {
@@ -339,8 +381,6 @@ struct WithoutEffectsButtonStyle: ButtonStyle {
 }
 
 #Preview {
-    NavigationStack {
-        EditProfileView(path: .constant([]))
-    }
+    MainView()
 }
 
