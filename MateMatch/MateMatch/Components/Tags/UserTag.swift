@@ -12,15 +12,15 @@ struct UserTag: View {
     let tag: Tags
     
     var body: some View {
-        HStack {
+        HStack(spacing: 5) {
             Image(uiImage: UIImage(named: tag.icon)!)
                 .resizable()
                 .scaledToFill()
-                .frame(width: 20, height: 20)
+                .frame(width: 15, height: 15)
                 .foregroundStyle(.white)
             
             Text(tag.rawValue)
-                .font(.system(size: 14, weight: .medium, design: .rounded))
+                .font(.system(size: 12, weight: .medium, design: .rounded))
                 .fixedSize()
                 .foregroundStyle(.white.opacity(1))
         }

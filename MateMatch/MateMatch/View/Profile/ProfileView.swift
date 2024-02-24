@@ -43,6 +43,7 @@ struct ProfileView: View {
     @State private var testSystem: Bool = false
     
     @State private var showMore: Bool = false
+    @State private var testShow: Bool = false
     
     @StateObject var sections = SectionsViewModel()
     @StateObject var userVM = UserViewModel()
