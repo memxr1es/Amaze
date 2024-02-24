@@ -170,7 +170,7 @@ struct ProfileView: View {
                     
                     VStack(alignment: .leading, spacing: 5) {
                         HStack {
-                            Text("Никита")
+                            Text(userVM.user.firstName)
                                 .font(.system(size: 26, weight: .semibold, design: .rounded))
                                 .foregroundStyle(.black)
                             
@@ -182,9 +182,9 @@ struct ProfileView: View {
                                 }
                         }
                         
-                        Text("21, Рыбное")
-                            .font(.system(size: 14, design: .rounded))
-                            .foregroundStyle(Color(.systemGray2))
+                        Text("Профиль")
+                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.black.opacity(0.3))
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
