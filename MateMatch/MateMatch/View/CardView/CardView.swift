@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CardView: View {
     
-    @StateObject var cardData: CardsViewModel = CardsViewModel()
+    @EnvironmentObject var cardData: CardsViewModel
     @Binding var showParametersSheet: Bool
     
     var body: some View {

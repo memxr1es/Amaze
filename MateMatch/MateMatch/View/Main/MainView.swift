@@ -16,6 +16,8 @@ struct MainView: View {
     
     @State private var navigationPath: [String] = []
     
+    @StateObject private var cardData = CardsViewModel()
+    
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack(spacing: 0) {
@@ -43,6 +45,12 @@ struct MainView: View {
                 .animation(.easeInOut, value: showParametersSheet)
         }
         .overlay(sheet)
+        .overlay {
+            if cardData.showMateProfile {
+                MateOverviewView(mate: cardData.selectedMate!)
+                    .environmentObject(cardData)
+            }
+        }
     }
     
     var sheet: some View {
@@ -60,6 +68,7 @@ struct MainView: View {
         switch selectedTab {
             case .main:
                 CardView(showParametersSheet: $showParametersSheet)
+                .environmentObject(cardData)
                 .padding(.bottom, 20)
             case .overview:
                 EmptyView()

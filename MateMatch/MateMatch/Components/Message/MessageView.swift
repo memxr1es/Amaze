@@ -13,7 +13,7 @@ struct MessageView: View {
     
     var body: some View {
         HStack(spacing: 15) {
-            Image(mate.avatar)
+            Image(mate.avatar.first!)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 60, height: 60)
