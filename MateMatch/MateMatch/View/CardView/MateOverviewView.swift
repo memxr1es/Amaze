@@ -120,7 +120,7 @@ struct MateOverviewView: View {
                         }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .padding(.top, 30)
+                    .padding(.top, 20)
                     .padding(.horizontal, 30)
                 }
             }

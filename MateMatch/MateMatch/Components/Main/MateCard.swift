@@ -86,7 +86,7 @@ struct MateCard: View {
                 .opacity(0.8)
         }
         .frame(maxHeight: .infinity, alignment: .top)
-        .padding(.top, 30)
+        .padding(.top, 20)
         .padding(.horizontal, 20)
     }
     
