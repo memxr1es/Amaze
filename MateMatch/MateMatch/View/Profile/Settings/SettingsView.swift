@@ -11,8 +11,14 @@ struct SettingsView: View {
     
     @Environment(\.dismiss) private var dismiss
 
-    @EnvironmentObject var sections: SectionsViewModel
-    @EnvironmentObject var userVM: UserViewModel
+//    @EnvironmentObject var sections: SectionsViewModel
+//    @EnvironmentObject var userVM: UserViewModel
+    
+    @StateObject var sections = SectionsViewModel()
+    @StateObject var userVM = UserViewModel()
+    
+    @State private var showFeedback: Bool = false
+    @State private var showExit: Bool = false
     
     @Binding var path: [String]
     
@@ -28,6 +34,43 @@ struct SettingsView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.theme.bgColor)
         .overlay(header)
+        .disabled(showFeedback)
+        .overlay {
+            ZStack {
+                VisualEffectView(effect: UIBlurEffect(style: .systemThickMaterialDark))
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.spring) {
+                            showFeedback.toggle()
+                        }
+                    }
+                    .opacity(showFeedback ? 0.7 : 0)
+                
+                
+                FeedbackMenu(showFeedback: $showFeedback)
+                    .offset(y: showFeedback ? 280 : 600)
+                    .animation(.spring, value: showFeedback)
+                    .transition(.move(edge: .bottom))
+            }
+        }
+        .overlay {
+            ZStack {
+                VisualEffectView(effect: UIBlurEffect(style: .systemThickMaterialDark))
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.spring) {
+                            showExit.toggle()
+                        }
+                    }
+                    .opacity(showExit ? 0.7 : 0)
+                
+                
+                ExitMenu(showExit: $showExit)
+                    .offset(y: showExit ? 300 : 600)
+                    .animation(.spring, value: showExit)
+                    .transition(.move(edge: .bottom))
+            }
+        }
     }
     
     var header: some View {
@@ -112,7 +155,7 @@ struct SettingsView: View {
     
     var applicationSection: some View {
         VStack(alignment: .leading) {
-            ForEach(ApplicationSections.allCases, id: \.self) { application in
+            ForEach(ApplicationSections.allCases.filter({$0 != .feedbackOfError && $0 != .exit}), id: \.self) { application in
                 VStack {
                     NavigationLink(value: "Application Section") {
                         HStack(spacing: 15) {
@@ -140,6 +183,35 @@ struct SettingsView: View {
                 })
             }
             .padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15))
+            ForEach(ApplicationSections.allCases.filter({$0 == .feedbackOfError || $0 == .exit}), id: \.self) { application in
+                VStack {
+                    HStack(spacing: 15) {
+                        Image(systemName: application.icon)
+                            .font(.system(size: 20))
+                            .foregroundStyle(.black.opacity(0.4))
+                            .frame(width: 30, height: 30, alignment: .center)
+                        
+                        Text(application.rawValue)
+                            .font(.system(size: 14, design: .rounded))
+                            .foregroundStyle(.black.opacity(0.85))
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.black)
+                            .padding(.trailing, 20)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .onTapGesture {
+                    withAnimation(.spring) {
+                        if application == .feedbackOfError { showFeedback.toggle() }
+                        else { showExit.toggle() }
+                    }
+                }
+            }
+            .padding(EdgeInsets(top: 0, leading: 15, bottom: 15, trailing: 15))
+
         }
     }
     

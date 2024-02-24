@@ -52,7 +52,7 @@
 		658A412F2B68D1250062EF82 /* MateCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A412E2B68D1250062EF82 /* MateCard.swift */; };
 		658A41312B6918EC0062EF82 /* UserTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A41302B6918EC0062EF82 /* UserTag.swift */; };
 		65980A242B8774A700C1437C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65980A232B8774A700C1437C /* Preview Assets.xcassets */; };
-		65B9BF692B6F933800850A56 /* TestVie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BF682B6F933800850A56 /* TestVie.swift */; };
+		65B9BF692B6F933800850A56 /* FeedbackMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BF682B6F933800850A56 /* FeedbackMenu.swift */; };
 		65B9BF6B2B6F96FC00850A56 /* MatchedMateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BF6A2B6F96FC00850A56 /* MatchedMateView.swift */; };
 		65B9BF6E2B6F994F00850A56 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BF6D2B6F994F00850A56 /* ChatView.swift */; };
 		65B9BF702B6F9DDE00850A56 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B9BF6F2B6F9DDE00850A56 /* MessageView.swift */; };
@@ -108,7 +108,7 @@
 		658A412E2B68D1250062EF82 /* MateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MateCard.swift; sourceTree = "<group>"; };
 		658A41302B6918EC0062EF82 /* UserTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTag.swift; sourceTree = "<group>"; };
 		65980A232B8774A700C1437C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		65B9BF682B6F933800850A56 /* TestVie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVie.swift; sourceTree = "<group>"; };
+		65B9BF682B6F933800850A56 /* FeedbackMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackMenu.swift; sourceTree = "<group>"; };
 		65B9BF6A2B6F96FC00850A56 /* MatchedMateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchedMateView.swift; sourceTree = "<group>"; };
 		65B9BF6D2B6F994F00850A56 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		65B9BF6F2B6F9DDE00850A56 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
@@ -251,7 +251,7 @@
 				658A41232B68C3100062EF82 /* ViewModel */,
 				658A41222B68C30E0062EF82 /* View */,
 				658A411A2B68C2FC0062EF82 /* Preview Content */,
-				65B9BF682B6F933800850A56 /* TestVie.swift */,
+				65B9BF682B6F933800850A56 /* FeedbackMenu.swift */,
 			);
 			path = MateMatch;
 			sourceTree = "<group>";
@@ -456,7 +456,7 @@
 				6543B6612B764DE900FF4BC5 /* QRCodeView.swift in Sources */,
 				658A412D2B68C45F0062EF82 /* TabItem.swift in Sources */,
 				653F9C0D2B85D06100B6409D /* SectionsViewModel.swift in Sources */,
-				65B9BF692B6F933800850A56 /* TestVie.swift in Sources */,
+				65B9BF692B6F933800850A56 /* FeedbackMenu.swift in Sources */,
 				65B9BF702B6F9DDE00850A56 /* MessageView.swift in Sources */,
 				65B9BF6E2B6F994F00850A56 /* ChatView.swift in Sources */,
 				65B9BF772B71578700850A56 /* TagLayout.swift in Sources */,
@@ -611,6 +611,7 @@
 				DEVELOPMENT_TEAM = 8X92Z3PBVZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -640,6 +641,7 @@
 				DEVELOPMENT_TEAM = 8X92Z3PBVZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

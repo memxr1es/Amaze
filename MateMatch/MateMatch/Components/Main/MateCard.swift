@@ -70,7 +70,7 @@ struct MateCard: View {
             }
             
             FlexibleView(availableWidth: UIScreen.main.bounds.width - 20, data: mateInfo.tags ?? [], spacing: 10, alignment: .leading) { item in
-                UserTag(nameOfGame: item.tag.rawValue)
+                UserTag(tag: item.tag)
             }
         
             HStack {

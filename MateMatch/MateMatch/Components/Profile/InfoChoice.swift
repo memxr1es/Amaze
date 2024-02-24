@@ -28,9 +28,13 @@ struct InfoChoice: View {
                     Text(purpose.description)
                         .font(.system(size: 16, design: .rounded))
                         .foregroundStyle(.gray.opacity(0.6))
+                        .lineSpacing(5)
                 }
             }
             .padding()
+            .onTapGesture {
+                selectedPurpose = purpose
+            }
             .background {
                 RoundedRectangle(cornerRadius: 15)
                     .fill(.white)
@@ -41,9 +45,6 @@ struct InfoChoice: View {
             }
             .padding(.horizontal)
             .padding(.top, 5)
-            .onTapGesture {
-                selectedPurpose = purpose
-            }
         }
     }
 }

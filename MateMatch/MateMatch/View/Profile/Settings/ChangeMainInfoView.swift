@@ -61,8 +61,9 @@ struct ChangeMainInfoView: View {
             }
             .sheet(isPresented: $showDatePicker) {
                 CarouselCalendar(currentDate: $newValue, currentDateUser: $newValueDate, showDatePicker: $showDatePicker)
-                    .padding(.top, 40)
+                    .padding(.top, 20)
                     .presentationDetents([.fraction(0.35)])
+                    .background(.white)
             }
         }
         .onAppear {

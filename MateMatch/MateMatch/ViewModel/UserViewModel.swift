@@ -8,6 +8,22 @@
 import Foundation
 
 class UserViewModel: ObservableObject {
-    @Published var user = User(firstName: "Никита", userPhoto: ["user-avatar"], age: 21, birthDay: Date.now, gender: .male, about: "Есть что-то во мне особенное...", game: [.apexLegends, .backrooms, .dota, .minecraft], purpose: .fun)
+    @Published var user = User(firstName: "Никита", userPhoto: ["user-avatar"], age: 21, birthDay: Date.now, gender: .male, about: "Есть что-то во мне особенное...", isVerified: false, city: nil, game: [.apexLegends, .backrooms, .dota, .minecraft], purpose: nil)
+    
+    @Published var completed: [String: Bool] = [:]
+    
+    init() {
+        fillCompleted()
+    }
+    
+    func fillCompleted() {
+        completed = [
+            "Верификация": user.isVerified ? false : true,
+            "Больше фото": user.userPhoto.count < 5 ? true : false,
+            "Личное био": user.about.isEmpty ? true : false,
+            "Твой статус": user.purpose == nil ? true : false,
+            "Доп. инфо": user.city == nil ? true : false,
+        ]
+    }
 }
 

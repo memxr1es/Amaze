@@ -12,6 +12,7 @@ struct ChoicePurpose: View {
     @Environment(\.dismiss) private var dismiss
     
     @State var selectedPurpose: Purpose? = nil
+    @EnvironmentObject var userVM: UserViewModel
     
     var body: some View {
         VStack {
@@ -26,10 +27,18 @@ struct ChoicePurpose: View {
         }
         .frame(maxHeight: .infinity)
         .background(.white)
+        .onAppear {
+            guard let purpose = userVM.user.purpose else { return }
+            
+            selectedPurpose = purpose
+        }
     }
     
     var acceptButton: some View {
-        Button {}
+        Button {
+            userVM.user.purpose = selectedPurpose
+            dismiss()
+        }
         label: {
             Text("Сохранить")
                 .font(.system(size: 18, design: .rounded))
@@ -44,6 +53,7 @@ struct ChoicePurpose: View {
                 .fill(.white)
                 .frame(height: 55)
                 .onTapGesture {
+                    userVM.user.purpose = nil
                     dismiss()
                 }
         }
@@ -78,7 +88,7 @@ struct DragButtonStyle: ButtonStyle {
     }
 }
 
-struct DisabledButtonStyle: ButtonStyle {
+struct DisabledButtonStyle: PrimitiveButtonStyle {
     
     let disabled: Bool
     
@@ -90,7 +100,13 @@ struct DisabledButtonStyle: ButtonStyle {
             .background(RoundedRectangle(cornerRadius: 30).foregroundStyle(disabled ? .black.opacity(0.2) : .black))
             .padding(.horizontal)
             .padding(.top, 15)
-            
+            .simultaneousGesture(
+                TapGesture().onEnded {
+                    if !disabled {
+                        configuration.trigger()
+                    }
+                }
+            )
     }
 }
 

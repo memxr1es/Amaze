@@ -49,7 +49,7 @@ struct TagList: View {
         ScrollView(.horizontal) {
             HStack(spacing: 12) {
                 ForEach(selectedTags, id: \.self) { tag in
-                    listTag(tag.rawValue, Color(#colorLiteral(red: 0, green: 0.7045553327, blue: 0.6918279529, alpha: 1)), "checkmark")
+                    listTag(tag, Color(#colorLiteral(red: 0, green: 0.7045553327, blue: 0.6918279529, alpha: 1)), "checkmark")
                         .matchedGeometryEffect(id: tag, in: animation)
                     // Removing from Selected List
                         .onTapGesture {
@@ -71,7 +71,7 @@ struct TagList: View {
         ScrollView(.vertical) {
             TagLayout(alignment: .center, spacing: 10) {
                 ForEach(Tags.allCases.filter{ !selectedTags.contains($0)}, id: \.self) { tag in
-                    listTag(tag.rawValue, Color(#colorLiteral(red: 0.3365147114, green: 0.3369267881, blue: 0.3494216204, alpha: 1)), "plus")
+                    listTag(tag, Color(#colorLiteral(red: 0.3365147114, green: 0.3369267881, blue: 0.3494216204, alpha: 1)), "plus")
                         .matchedGeometryEffect(id: tag, in: animation)
                         .onTapGesture {
                             // Adding to Selected Tag List
@@ -122,9 +122,14 @@ struct TagList: View {
     }
     
     @ViewBuilder
-    func listTag(_ tag: String, _ color: Color, _ icon: String) -> some View {
-        HStack {
-            Text(tag)
+    func listTag(_ tag: Tags, _ color: Color, _ icon: String) -> some View {
+        HStack(spacing: 5) {
+            Image(uiImage: UIImage(named: tag.icon)!)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 20, height: 20)
+            
+            Text(tag.rawValue)
             
             Image(systemName: icon)
         }

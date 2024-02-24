@@ -43,6 +43,7 @@ struct ProfileView: View {
     @State private var testSystem: Bool = false
     
     @State private var showMore: Bool = false
+    @State private var testShow: Bool = false
     
     @StateObject var sections = SectionsViewModel()
     @StateObject var userVM = UserViewModel()
@@ -91,6 +92,7 @@ struct ProfileView: View {
             if navPath == "Edit Profile" {
                 EditProfileView(path: $path)
                     .navigationBarBackButtonHidden()
+                    .environmentObject(userVM)
             } else if navPath == "First Step" {
                 VerificationView(path: $path)
                     .navigationBarBackButtonHidden()
@@ -228,6 +230,7 @@ struct ProfileView: View {
                     Text("Повысь свои шансы \nнайти тиммейта")
                         .font(.system(size: 14, design: .rounded))
                         .foregroundStyle(Color(.systemGray))
+                        .lineSpacing(5)
                 }
                 .padding(.horizontal)
                 .frame(height: 100)
@@ -236,9 +239,13 @@ struct ProfileView: View {
                     .foregroundStyle(Color(.systemGray))
                 
             }
+            .onTapGesture {
+                showMore.toggle()
+            }
             
             if showMore {
                 MoreInfo()
+                    .environmentObject(userVM)
                     .padding(.horizontal, 10)
             }
         }
@@ -249,9 +256,6 @@ struct ProfileView: View {
                 .fill(.white)
         }
         .padding(.horizontal)
-        .onTapGesture {
-            showMore.toggle()
-        }
     }
     
     var checkCompatibility: some View {
@@ -261,11 +265,9 @@ struct ProfileView: View {
                     Text("Что общего?")
                         .font(.system(size: 20, weight: .semibold, design: .rounded))
                     
-                    Text("Позови друга или подругу")
+                    Text("Позови друга или подругу \nи узнай, что между вами общего")
                         .font(.system(size: 14, design: .rounded))
-                    
-                    Text("и узнай, что между вами общего")
-                        .font(.system(size: 14, design: .rounded))
+                        .lineSpacing(5)
                 }
                 .foregroundColor(.white)
                 

@@ -53,59 +53,62 @@ struct FAQView: View {
     }
     
     var manual: some View {
-        VStack(alignment: .leading) {
-            Text(sections.selectedFAQSection.rawValue)
-                .font(.system(size: 26, weight: .semibold, design: .rounded))
-                .foregroundStyle(.black)
-                .frame(width: 200)
-            
-            VStack(alignment: .leading, spacing: 10) {
-                ForEach(sections.manualSection) { section in
-                    VStack(alignment: .leading, spacing: 5) {
-                        Button {
-                            withAnimation(.spring) {
-                                self.sections.manualSection[sectionIndex(section: section, dataModel: 1)].expanded.toggle()
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading) {
+                Text(sections.selectedFAQSection.rawValue)
+                    .font(.system(size: 26, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.black)
+                    .frame(width: 200)
+                
+                VStack(alignment: .leading, spacing: 10) {
+                    ForEach(sections.manualSection) { section in
+                        VStack(alignment: .leading, spacing: 5) {
+                            Button {
+                                withAnimation(.spring) {
+                                    self.sections.manualSection[sectionIndex(section: section, dataModel: 1)].expanded.toggle()
+                                }
+                            } label: {
+                                HStack {
+                                    Text(section.name)
+                                        .font(.system(size: 16, weight: .light))
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .multilineTextAlignment(.leading)
+                                    
+                                    Image(systemName: "chevron.up")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .frame(width: 30, alignment: .center)
+                                        .rotationEffect(.degrees(section.expanded ? -180 : 0))
+                                }
+                                .padding(.vertical, 10)
                             }
-                        } label: {
-                            HStack {
-                                Text(section.name)
-                                    .font(.system(size: 16, weight: .light))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .multilineTextAlignment(.leading)
-                                
-                                Image(systemName: "chevron.up")
-                                    .font(.system(size: 14, weight: .semibold))
-                                    .frame(width: 30, alignment: .center)
-                                    .rotationEffect(.degrees(section.expanded ? -180 : 0))
+                            .foregroundStyle(.black)
+                            
+                            VStack {
+                                Text(section.description)
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(.black.opacity(0.5))
+                                    .padding(.bottom, 10)
+                                    .lineSpacing(5)
+                                    .animation(section.expanded ? .none : .linear(duration: 60), value: section.expanded)
                             }
-                            .padding(.vertical, 10)
+                            .frame(height: section.expanded ? nil : 0, alignment: .bottom)
+                            .clipped()
+                 
+                            Rectangle()
+                                .fill(.black.opacity(0.3))
+                                .frame(height: 0.5)
+                                .padding(.horizontal, -15)
+                                .opacity(section.name.contains("Под") ? 0 : 1)
                         }
-                        .foregroundStyle(.black)
-                        
-                        VStack {
-                            Text(section.description)
-                                .font(.system(size: 14))
-                                .foregroundStyle(.black.opacity(0.5))
-                                .padding(.bottom, 10)
-                                .lineSpacing(5)
-                                .animation(section.expanded ? .none : .linear(duration: 60), value: section.expanded)
+                        .onDisappear {
+                            self.sections.manualSection[sectionIndex(section: section, dataModel: 1)].expanded = false
                         }
-                        .frame(height: section.expanded ? nil : 0, alignment: .bottom)
-                        .clipped()
-             
-                        Rectangle()
-                            .fill(.black.opacity(0.3))
-                            .frame(height: 0.5)
-                            .padding(.horizontal, -15)
-                            .opacity(section.name.contains("Под") ? 0 : 1)
-                    }
-                    .onDisappear {
-                        self.sections.manualSection[sectionIndex(section: section, dataModel: 1)].expanded = false
                     }
                 }
             }
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
+        .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
     }
     
     var signLogUp: some View {
