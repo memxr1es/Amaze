@@ -70,7 +70,7 @@ struct OverviewProfileView: View {
         Image(userVM.user.userPhoto.first!)
             .resizable()
             .scaledToFill()
-            .frame(height: 450)
+            .frame(width: UIScreen.main.bounds.width - 20, height: 550)
             .clipShape(RoundedRectangle(cornerRadius: 15))
             .padding(.horizontal, 10)
             .overlay {

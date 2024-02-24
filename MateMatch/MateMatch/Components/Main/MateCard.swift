@@ -35,10 +35,18 @@ struct MateCard: View {
         .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 220)
         .overlay {
             choiceIcon
+            
+            shortInfo
         }
         .offset(x: width, y: height)
         .rotationEffect(.degrees(Double(width / 40)))
         .gesture(gesture)
+        .simultaneousGesture(TapGesture().onEnded({ _ in
+            withAnimation {
+                cardData.showMateProfile.toggle()
+                cardData.selectedMate = mateInfo
+            }
+        }))
     }
     
     var shadowRectangle: some View {
@@ -46,6 +54,40 @@ struct MateCard: View {
             .foregroundStyle(
                 .linearGradient(colors: [.black.opacity(0.8), .black.opacity(0.5), .clear, .clear], startPoint: .bottom, endPoint: .top)
             )
+    }
+    
+    var shortInfo: some View {
+        HStack(spacing: 20) {
+            HStack(spacing: 5) {
+                Image(systemName: mateInfo.city != nil ? "network" : "")
+                    .font(.system(size: 18))
+                    .foregroundStyle(.white)
+                
+                Text(mateInfo.city ?? "")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white)
+            }
+            
+            HStack(spacing: 5) {
+                Image(systemName: mateInfo.purpose?.icon ?? "")
+                    .font(.system(size: 18))
+                    .foregroundStyle(.white)
+                
+                Text(mateInfo.purpose?.rawValue ?? "")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white)
+            }
+            
+            Spacer()
+            
+            Image(systemName: "hand.raised")
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(.white)
+                .opacity(0.8)
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .padding(.top, 20)
+        .padding(.horizontal, 20)
     }
     
     var choiceIcon: some View {
@@ -91,11 +133,15 @@ struct MateCard: View {
     }
     
     var userPhoto: some View {
-        Image("\(mateInfo.avatar)")
+        Image("\(mateInfo.avatar.first!)")
             .resizable()
             .scaledToFill()
             .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 220, alignment: .bottom)
             .clipShape(RoundedRectangle(cornerRadius: 15))
+            .overlay {
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(.radialGradient(Gradient(colors: [.clear, .black]), center: .center, startRadius: 250, endRadius: 400))
+            }
         
     }
     
@@ -240,14 +286,14 @@ struct PressEffectButtonStyle_Choice: ButtonStyle {
 }
 
 let MOCK_MATE = [
-    Mate(name: "Никита", age: 21, tags: [Tag(tag: .apexLegends), Tag(tag: .backrooms), Tag(tag: .dota), Tag(tag: .counterStrike), Tag(tag: .leagueOfLegends)], avatar: "user-avatar", verified: true),
-    Mate(name: "Данил", age: 22, tags: [Tag(tag: .brawlStars), Tag(tag: .phasmofobia), Tag(tag: .rocketLeague), Tag(tag: .standoff)], avatar: "user-avatar-2", verified: true),
-    Mate(name: "Настя", age: 16, tags: [Tag(tag: .dota), Tag(tag: .leagueOfLegends)], avatar: "user-avatar-3", verified: false),
-    Mate(name: "Даша", age: 25, avatar: "user-avatar-4", verified: false),
-    Mate(name: "Иван", age: 18, tags: [Tag(tag: .counterStrike), Tag(tag: .apexLegends), Tag(tag: .standoff)], avatar: "user-avatar-5", verified: false),
-    Mate(name: "Дима", age: 20, tags: [Tag(tag: .phasmofobia), Tag(tag: .minecraft), Tag(tag: .backrooms), Tag(tag: .rocketLeague)], avatar: "user-avatar-6", verified: true)
+    Mate(name: "Никита", age: 21, tags: [Tag(tag: .apexLegends), Tag(tag: .backrooms), Tag(tag: .dota), Tag(tag: .counterStrike), Tag(tag: .leagueOfLegends)], avatar: ["user-avatar"], verified: true, gender: .male),
+    Mate(name: "Данил", age: 22, tags: [Tag(tag: .brawlStars), Tag(tag: .phasmofobia), Tag(tag: .rocketLeague), Tag(tag: .standoff)], avatar: ["user-avatar-2"], verified: true, gender: .male, city: "Москва", purpose: .stream),
+    Mate(name: "Настя", age: 16, tags: [Tag(tag: .dota), Tag(tag: .leagueOfLegends)], avatar: ["user-avatar-3"], verified: false, gender: .female, city: "Москва"),
+    Mate(name: "Даша", age: 25, avatar: ["user-avatar-4"], verified: false, gender: .female),
+    Mate(name: "Иван", age: 18, tags: [Tag(tag: .counterStrike), Tag(tag: .apexLegends), Tag(tag: .standoff)], avatar: ["user-avatar-5"], verified: false, gender: .male),
+    Mate(name: "Дима", age: 20, tags: [Tag(tag: .phasmofobia), Tag(tag: .minecraft), Tag(tag: .backrooms), Tag(tag: .rocketLeague)], avatar: ["user-avatar-6"], verified: true, gender: .male, city: "Санкт-Петербург", purpose: .mate)
 ]
 
 #Preview {
-    MateCard(mateInfo: MOCK_MATE[1])
+    MateCard(mateInfo: MOCK_MATE[5])
 }
