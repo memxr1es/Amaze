@@ -28,6 +28,7 @@ struct VerificationView: View {
                 buttonContinue
                 buttonDismiss
             }
+            .padding(.bottom, 25)
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

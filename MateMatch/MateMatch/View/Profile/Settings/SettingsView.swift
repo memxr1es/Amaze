@@ -11,11 +11,11 @@ struct SettingsView: View {
     
     @Environment(\.dismiss) private var dismiss
 
-//    @EnvironmentObject var sections: SectionsViewModel
-//    @EnvironmentObject var userVM: UserViewModel
+    @EnvironmentObject var sections: SectionsViewModel
+    @EnvironmentObject var userVM: UserViewModel
     
-    @StateObject var sections = SectionsViewModel()
-    @StateObject var userVM = UserViewModel()
+//    @StateObject var sections = SectionsViewModel()
+//    @StateObject var userVM = UserViewModel()
     
     @State private var showFeedback: Bool = false
     @State private var showExit: Bool = false
