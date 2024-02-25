@@ -13,12 +13,20 @@ struct MateOverviewView: View {
     
     @State private var onAppear: Bool = false
     
+    @State private var currentPhoto: String = ""
+    @State private var indexOfPhoto: Int = 0
+    
+//    @StateObject var cardData = CardsViewModel()
     @EnvironmentObject var cardData: CardsViewModel
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack {
                 userPhoto
+                    .onTapGesture(coordinateSpace: .global) { location in
+                        tapCalculate(location)
+                    }
+                
                 if !mate.about.isEmpty {
                     bio
                 }
@@ -35,8 +43,13 @@ struct MateOverviewView: View {
         .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.theme.bgColor)
-        .overlay(header)
-        .overlay(bottomButtons)
+        .overlay {
+            ZStack {
+                header
+                
+                bottomButtons
+            }
+        }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
                 withAnimation {
@@ -86,44 +99,58 @@ struct MateOverviewView: View {
     }
     
     var userPhoto: some View {
-        Image(mate.avatar.first!)
-            .resizable()
-            .scaledToFill()
-            .frame(width: UIScreen.main.bounds.width - 20, height: 550)
-            .clipShape(RoundedRectangle(cornerRadius: 15))
-            .padding(.horizontal, 10)
-            .overlay {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(.radialGradient(Gradient(colors: [.clear, .black]), center: .center, startRadius: 200, endRadius: 400))
-                        .padding(.horizontal, 10)
-                    
-                    HStack(spacing: 15) {
-                        HStack(spacing: 5) {
-                            Image(systemName: mate.city != nil ? "network" : "")
-                                .font(.system(size: 18))
-                                .foregroundStyle(.white)
-                            
-                            Text(mate.city ?? "")
-                                .font(.system(size: 14))
-                                .foregroundStyle(.white)
-                        }
-                        
-                        HStack(spacing: 5) {
-                            Image(systemName: mate.purpose?.icon ?? "")
-                                .font(.system(size: 18))
-                                .foregroundStyle(.white)
-                            
-                            Text(mate.purpose?.rawValue ?? "")
-                                .font(.system(size: 14))
-                                .foregroundStyle(.white)
-                        }
+        TabView(selection: $currentPhoto) {
+            ForEach(mate.avatar, id: \.self) { avatar in
+                RoundedRectangle(cornerRadius: 0)
+                    .fill(.radialGradient(Gradient(colors: [.clear, .black]), center: .center, startRadius: 250, endRadius: 400))
+                    .background {
+                        Image(avatar)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 250, alignment: .bottom)
+                            .clipShape(Rectangle())
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .padding(.top, 20)
-                    .padding(.horizontal, 30)
+            }
+        }
+        .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 250)
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .animation(.easeInOut, value: currentPhoto)
+        .transition(.slide)
+        .clipShape(RoundedRectangle(cornerRadius: 15))
+        .overlay(shortAboutUser)
+        .overlay(photoSlider)
+    }
+    
+    var shortAboutUser: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 15)
+                .fill(.radialGradient(Gradient(colors: [.clear, .black]), center: .center, startRadius: 200, endRadius: 400))
+            
+            HStack(spacing: 15) {
+                HStack(spacing: 5) {
+                    Image(systemName: mate.city != nil ? "network" : "")
+                        .font(.system(size: 16))
+                        .foregroundStyle(.white)
+                    
+                    Text(mate.city ?? "")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.white)
+                }
+                
+                HStack(spacing: 5) {
+                    Image(systemName: mate.purpose?.icon ?? "")
+                        .font(.system(size: 16))
+                        .foregroundStyle(.white)
+                    
+                    Text(mate.purpose?.rawValue ?? "")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.white)
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding(.top, mate.avatar.count > 1 ? 40 : 20)
+            .padding(.horizontal, 20)
+        }
     }
     
     var bio: some View {
@@ -189,6 +216,40 @@ struct MateOverviewView: View {
         .padding(.top, 50)
     }
     
+    var photoSlider: some View {
+        HStack {
+            if mate.avatar.count > 1 {
+                ForEach(0...mate.avatar.count - 1, id: \.self) { index in
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(indexOfPhoto == index ? .white : .white.opacity(0.2))
+                        .frame(maxWidth: .infinity, maxHeight: 3)
+                }
+            }
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .padding(.horizontal)
+        .padding(.top, 20)
+    }
+    
+    func tapCalculate(_ location: CGPoint) {
+        if location.x < 150 {
+            if indexOfPhoto > 0 {
+                withAnimation {
+                    indexOfPhoto -= 1
+                    currentPhoto = mate.avatar[indexOfPhoto]
+                }
+            }
+        } else if location.x > 300 {
+            if indexOfPhoto < mate.avatar.count - 1 {
+                withAnimation {
+                    indexOfPhoto += 1
+                    currentPhoto = mate.avatar[indexOfPhoto]
+                }
+            }
+        }
+    }
+    
+    
     @ViewBuilder
     func bottomButtons(_ type: TypeOfBottomButton) -> some View {
         Button {
@@ -227,7 +288,7 @@ struct MateOverviewView: View {
 }
 
 #Preview {
-    MateOverviewView(mate: MOCK_MATE[5])
+    MateOverviewView(mate: MOCK_MATE[1])
 }
 
 enum TypeOfBottomButton: String, CaseIterable {
