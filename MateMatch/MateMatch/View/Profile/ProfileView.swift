@@ -43,6 +43,7 @@ struct ProfileView: View {
     @State private var testSystem: Bool = false
     
     @State private var showMore: Bool = false
+    @State private var testShow: Bool = false
     
     @StateObject var sections = SectionsViewModel()
     @StateObject var userVM = UserViewModel()
@@ -91,6 +92,7 @@ struct ProfileView: View {
             if navPath == "Edit Profile" {
                 EditProfileView(path: $path)
                     .navigationBarBackButtonHidden()
+                    .environmentObject(userVM)
             } else if navPath == "First Step" {
                 VerificationView(path: $path)
                     .navigationBarBackButtonHidden()
@@ -123,6 +125,10 @@ struct ProfileView: View {
                 DetailedPremiumView(path: $path)
                     .navigationBarBackButtonHidden()
                     .environmentObject(sections)
+            } else if navPath == "Profile Overview" {
+                OverviewProfileView(path: $path)
+                    .navigationBarBackButtonHidden()
+                    .environmentObject(userVM)
             }
         }
     }
@@ -153,36 +159,38 @@ struct ProfileView: View {
     
     var profileSection: some View {
         VStack {
-            HStack(spacing: 15) {
-                Image("user-avatar")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 80, height: 80)
-                    .clipShape(Circle())
-                
-                
-                VStack(alignment: .leading, spacing: 5) {
-                    HStack {
-                        Text("Никита")
-                            .font(.system(size: 26, weight: .semibold, design: .rounded))
-                            .foregroundStyle(.black)
-                        
-                        Image(systemName: testSystem ? "checkmark.seal.fill" : "checkmark.seal")
-                            .foregroundStyle(testSystem ? .blue : Color(.systemGray))
-                            .frame(width: 20, height: 20)
-                            .onTapGesture {
-                                withAnimation { testSystem.toggle() }
-                            }
-                    }
+            NavigationLink(value: "Profile Overview") {
+                HStack(spacing: 15) {
+                    Image("user-avatar")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 80, height: 80)
+                        .clipShape(Circle())
                     
-                    Text("21, Рыбное")
-                        .font(.system(size: 14, design: .rounded))
-                        .foregroundStyle(Color(.systemGray2))
+                    
+                    VStack(alignment: .leading, spacing: 5) {
+                        HStack {
+                            Text(userVM.user.firstName)
+                                .font(.system(size: 26, weight: .semibold, design: .rounded))
+                                .foregroundStyle(.black)
+                            
+                            Image(systemName: testSystem ? "checkmark.seal.fill" : "checkmark.seal")
+                                .foregroundStyle(testSystem ? .blue : Color(.systemGray))
+                                .frame(width: 20, height: 20)
+                                .onTapGesture {
+                                    withAnimation { testSystem.toggle() }
+                                }
+                        }
+                        
+                        Text("Профиль")
+                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.black.opacity(0.3))
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
+                .padding(.top)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal)
-            .padding(.top)
             
             HStack {
                 buttonProfile(icon: "pencil.and.scribble", text: "Изменить", alignment: false)
@@ -222,6 +230,7 @@ struct ProfileView: View {
                     Text("Повысь свои шансы \nнайти тиммейта")
                         .font(.system(size: 14, design: .rounded))
                         .foregroundStyle(Color(.systemGray))
+                        .lineSpacing(5)
                 }
                 .padding(.horizontal)
                 .frame(height: 100)
@@ -230,9 +239,13 @@ struct ProfileView: View {
                     .foregroundStyle(Color(.systemGray))
                 
             }
+            .onTapGesture {
+                showMore.toggle()
+            }
             
             if showMore {
                 MoreInfo()
+                    .environmentObject(userVM)
                     .padding(.horizontal, 10)
             }
         }
@@ -243,9 +256,6 @@ struct ProfileView: View {
                 .fill(.white)
         }
         .padding(.horizontal)
-        .onTapGesture {
-            showMore.toggle()
-        }
     }
     
     var checkCompatibility: some View {
@@ -255,11 +265,9 @@ struct ProfileView: View {
                     Text("Что общего?")
                         .font(.system(size: 20, weight: .semibold, design: .rounded))
                     
-                    Text("Позови друга или подругу")
+                    Text("Позови друга или подругу \nи узнай, что между вами общего")
                         .font(.system(size: 14, design: .rounded))
-                    
-                    Text("и узнай, что между вами общего")
-                        .font(.system(size: 14, design: .rounded))
+                        .lineSpacing(5)
                 }
                 .foregroundColor(.white)
                 

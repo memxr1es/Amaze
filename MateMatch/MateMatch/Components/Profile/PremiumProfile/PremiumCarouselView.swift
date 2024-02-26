@@ -49,5 +49,5 @@ struct PremiumCarouselView: View {
 }
 
 #Preview {
-    PremiumView(path: .constant([]))
+    PremiumCarouselView(selectedTab: .constant(.bringItBack))
 }

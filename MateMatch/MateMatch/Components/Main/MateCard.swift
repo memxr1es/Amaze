@@ -23,6 +23,9 @@ struct MateCard: View {
     @State var dismiss: Bool = false
     @State var superLike: Bool = false
     
+    @State private var currentPhoto: String = ""
+    @State private var indexOfPhoto: Int = 0
+    
     @EnvironmentObject var cardData: CardsViewModel
 
     var body: some View {
@@ -35,10 +38,16 @@ struct MateCard: View {
         .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 220)
         .overlay {
             choiceIcon
+            
+            photoSlider
+            shortInfo
         }
         .offset(x: width, y: height)
         .rotationEffect(.degrees(Double(width / 40)))
         .gesture(gesture)
+        .onTapGesture(coordinateSpace: .global) { location in
+            tapCalculate(location)
+        }
     }
     
     var shadowRectangle: some View {
@@ -46,6 +55,40 @@ struct MateCard: View {
             .foregroundStyle(
                 .linearGradient(colors: [.black.opacity(0.8), .black.opacity(0.5), .clear, .clear], startPoint: .bottom, endPoint: .top)
             )
+    }
+    
+    var shortInfo: some View {
+        HStack(spacing: 20) {
+            HStack(spacing: 5) {
+                Image(systemName: mateInfo.city != nil ? "network" : "")
+                    .font(.system(size: 16))
+                    .foregroundStyle(.white)
+                
+                Text(mateInfo.city ?? "")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.white)
+            }
+            
+            HStack(spacing: 5) {
+                Image(systemName: mateInfo.purpose?.icon ?? "")
+                    .font(.system(size: 16))
+                    .foregroundStyle(.white)
+                
+                Text(mateInfo.purpose?.rawValue ?? "")
+                    .font(.system(size: 12))
+                    .foregroundStyle(.white)
+            }
+            
+            Spacer()
+            
+            Image(systemName: "hand.raised")
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundStyle(.white)
+                .opacity(0.8)
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .padding(.top, mateInfo.avatar.count > 1 ? 35 : 20)
+        .padding(.horizontal, 20)
     }
     
     var choiceIcon: some View {
@@ -70,7 +113,7 @@ struct MateCard: View {
             }
             
             FlexibleView(availableWidth: UIScreen.main.bounds.width - 20, data: mateInfo.tags ?? [], spacing: 10, alignment: .leading) { item in
-                UserTag(nameOfGame: item.tag.rawValue)
+                UserTag(tag: item.tag)
             }
         
             HStack {
@@ -91,12 +134,23 @@ struct MateCard: View {
     }
     
     var userPhoto: some View {
-        Image("\(mateInfo.avatar)")
-            .resizable()
-            .scaledToFill()
-            .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 220, alignment: .bottom)
-            .clipShape(RoundedRectangle(cornerRadius: 15))
-        
+        TabView(selection: $currentPhoto) {
+            ForEach(mateInfo.avatar, id: \.self) { avatar in
+                Rectangle()
+                    .fill(.radialGradient(Gradient(colors: [.clear, .black]), center: .center, startRadius: 250, endRadius: 400))
+                    .background {
+                        Image(avatar.name)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 220, alignment: .bottom)
+                            .clipShape(Rectangle())
+                    }
+            }
+        }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .animation(.easeInOut, value: currentPhoto)
+        .transition(.slide)
+        .clipShape(RoundedRectangle(cornerRadius: 15))
     }
     
     var overlayRectangle: some View {
@@ -104,6 +158,21 @@ struct MateCard: View {
             .foregroundStyle(
                 .linearGradient(colors: [cardColor.opacity(0.7), cardColor.opacity(0.5), cardColor.opacity(0.3), .clear, .clear], startPoint: startPoint, endPoint: endPoint)
             )
+    }
+    
+    var photoSlider: some View {
+        HStack {
+            if mateInfo.avatar.count > 1 {
+                ForEach(0...mateInfo.avatar.count - 1, id: \.self) { index in
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(indexOfPhoto == index ? .white : .white.opacity(0.2))
+                        .frame(maxWidth: .infinity, maxHeight: 3)
+                }
+            }
+        }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .padding(.horizontal)
+        .padding(.top, 20)
     }
     
     func swipeCard(width: CGFloat) {
@@ -227,6 +296,29 @@ struct MateCard: View {
                 }
         }
     }
+    
+    func tapCalculate(_ location: CGPoint) {
+        if location.x < 150 {
+            if indexOfPhoto > 0 {
+                withAnimation {
+                    indexOfPhoto -= 1
+                    currentPhoto = mateInfo.avatar[indexOfPhoto].name
+                }
+            }
+        } else if location.x > 150 && location.x < 300 {
+            withAnimation {
+                cardData.showMateProfile.toggle()
+                cardData.selectedMate = mateInfo
+            }
+        } else if location.x > 300 {
+            if indexOfPhoto < mateInfo.avatar.count - 1 {
+                withAnimation {
+                    indexOfPhoto += 1
+                    currentPhoto = mateInfo.avatar[indexOfPhoto].name
+                }
+            }
+        }
+    }
 }
 
 struct PressEffectButtonStyle_Choice: ButtonStyle {
@@ -240,12 +332,11 @@ struct PressEffectButtonStyle_Choice: ButtonStyle {
 }
 
 let MOCK_MATE = [
-    Mate(name: "Никита", age: 21, tags: [Tag(tag: .apexLegends), Tag(tag: .backrooms), Tag(tag: .dota), Tag(tag: .counterStrike), Tag(tag: .leagueOfLegends)], avatar: "user-avatar", verified: true),
-    Mate(name: "Данил", age: 22, tags: [Tag(tag: .brawlStars), Tag(tag: .phasmofobia), Tag(tag: .rocketLeague), Tag(tag: .standoff)], avatar: "user-avatar-2", verified: true),
-    Mate(name: "Настя", age: 16, tags: [Tag(tag: .dota), Tag(tag: .leagueOfLegends)], avatar: "user-avatar-3", verified: false),
-    Mate(name: "Даша", age: 25, avatar: "user-avatar-4", verified: false),
-    Mate(name: "Иван", age: 18, tags: [Tag(tag: .counterStrike), Tag(tag: .apexLegends), Tag(tag: .standoff)], avatar: "user-avatar-5", verified: false),
-    Mate(name: "Дима", age: 20, tags: [Tag(tag: .phasmofobia), Tag(tag: .minecraft), Tag(tag: .backrooms), Tag(tag: .rocketLeague)], avatar: "user-avatar-6", verified: true)
+    Mate(name: "Данил", age: 22, tags: [Tag(tag: .brawlStars), Tag(tag: .phasmofobia), Tag(tag: .rocketLeague), Tag(tag: .standoff)], avatar: [Photo(name: "user-avatar-2"), Photo(name: "xxx"), Photo(name: "xxx-2")], verified: true, gender: .male, city: "Москва", purpose: .stream),
+    Mate(name: "Настя", age: 16, tags: [Tag(tag: .dota), Tag(tag: .leagueOfLegends)], avatar: [Photo(name: "user-avatar-3"), Photo(name: "user-avatar-7")], verified: false, gender: .female, city: "Москва"),
+    Mate(name: "Даша", age: 25, avatar: [Photo(name: "user-avatar-4"), Photo(name: "user-avatar-8")], verified: false, gender: .female),
+    Mate(name: "Иван", age: 18, tags: [Tag(tag: .counterStrike), Tag(tag: .apexLegends), Tag(tag: .standoff)], avatar: [Photo(name: "user-avatar-5"), Photo(name: "user-avatar-9")], verified: false, gender: .male),
+    Mate(name: "Дима", age: 20, tags: [Tag(tag: .phasmofobia), Tag(tag: .minecraft), Tag(tag: .backrooms), Tag(tag: .rocketLeague)], avatar: [Photo(name: "user-avatar-6"), Photo(name: "user-avatar-10")], verified: true, gender: .male, city: "Санкт-Петербург", purpose: .mate)
 ]
 
 #Preview {

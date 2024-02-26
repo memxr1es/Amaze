@@ -49,5 +49,5 @@ struct StackCardView: View {
 }
 
 #Preview {
-    MainView()
+    StackCardView(mate: MOCK_MATE[1])
 }

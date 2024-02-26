@@ -14,7 +14,7 @@ struct User: Identifiable {
     var age: Int
     var birthDay: Date
     var gender: Genders
-    var about: String?
+    var about: String = ""
     var isVerified: Bool = false
     var city: String?
     var game: [Tags]?
