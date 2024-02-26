@@ -16,8 +16,6 @@ struct MateOverviewView: View {
     @State private var currentPhoto: String = ""
     @State private var indexOfPhoto: Int = 0
     
-    @State private var fakedPhotos: [Photo] = []
-    
     @EnvironmentObject var cardData: CardsViewModel
     
     var body: some View {
@@ -57,23 +55,6 @@ struct MateOverviewView: View {
                     onAppear.toggle()
                 }
             }
-            
-            guard fakedPhotos.isEmpty else { return }
-            
-            fakedPhotos.append(contentsOf: mate.avatar)
-            
-            if var firstPage = mate.avatar.first, var lastPage = mate.avatar.last {
-                currentPhoto = firstPage.id.uuidString
-                
-                firstPage.id = .init()
-                lastPage.id = .init()
-                
-                // MARK: Could be a mistake in the future
-                fakedPhotos.append(firstPage)
-                fakedPhotos.insert(lastPage, at: 0)
-            }
-            
-//            print(fakedPhotos)
         }
     }
     
@@ -117,30 +98,18 @@ struct MateOverviewView: View {
     }
     
     var userPhoto: some View {
-        GeometryReader {
-            let size = $0.size
-            
-            TabView(selection: $currentPhoto) {
-                ForEach(fakedPhotos) { avatar in
-                    RoundedRectangle(cornerRadius: 0)
-                        .fill(.radialGradient(Gradient(colors: [.clear, .black]), center: .center, startRadius: 250, endRadius: 400))
-                        .background {
-                            Image(avatar.name)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 250, alignment: .bottom)
-                                .clipShape(Rectangle())
-                        }
-                        .tag(avatar.id.uuidString)
-                        .offsetX(currentPhoto == avatar.id.uuidString) { rect in
-                            let minX = rect.minX
-                            let pageOffset = minX - (size.width * CGFloat(fakeIndex(avatar)))
-                            
-                            let pageProgress = pageOffset / size.width
-                            
-                            switchSelection(pageProgress)
-                        }
-                }
+        TabView(selection: $currentPhoto) {
+            ForEach(mate.avatar) { avatar in
+                RoundedRectangle(cornerRadius: 0)
+                    .fill(.radialGradient(Gradient(colors: [.clear, .black]), center: .center, startRadius: 250, endRadius: 400))
+                    .background {
+                        Image(avatar.name)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 250, alignment: .bottom)
+                            .clipShape(Rectangle())
+                    }
+                    .tag(avatar.id.uuidString)
             }
         }
         .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 250)
@@ -151,39 +120,16 @@ struct MateOverviewView: View {
         .overlay(photoSlider)
     }
     
-    func switchSelection(_ pageProgress: CGFloat) {
-        if -pageProgress < 1 {
-            if fakedPhotos.indices.contains(fakedPhotos.count - 1) {
-//                currentPhoto = fakedPhotos[fakedPhotos.count - 1].id.uuidString
-            }
-        }
-        
-        print("\(-pageProgress.rounded()) \(CGFloat(fakedPhotos.count - 1))")
-        
-        if -pageProgress > CGFloat(fakedPhotos.count - 1) {
-            if fakedPhotos.indices.contains(1) {
-                currentPhoto = fakedPhotos[0].id.uuidString
-
-            }
-        }
-    }
-    
-    
     func tapCalculate(_ location: CGPoint) {
         if location.x < 150 {
             indexOfPhoto = indexOfPhoto > 0 ? indexOfPhoto - 1 : (indexOfPhoto == 0 ? mate.avatar.count - 1 : indexOfPhoto - 1)
-//            print("indexOfPhoto: \(indexOfPhoto + 1), fakedPhoto.count: \(fakedPhotos.count - 1)")
-            
-            if fakedPhotos.indices.contains(fakedPhotos.count - 1) {
-                currentPhoto = fakedPhotos[indexOfPhoto + 1].id.uuidString
-            }
+
+            currentPhoto = mate.avatar[indexOfPhoto].id.uuidString
             
         } else if location.x > 250 {
             indexOfPhoto = indexOfPhoto < mate.avatar.count - 1 ? indexOfPhoto + 1 : (indexOfPhoto == mate.avatar.count - 1 ? 0 : indexOfPhoto + 1)
             
-            if fakedPhotos.indices.contains(fakedPhotos.count - 1) {
-                currentPhoto = fakedPhotos[indexOfPhoto + 1].id.uuidString
-            }
+            currentPhoto = mate.avatar[indexOfPhoto].id.uuidString
         }
     }
     
@@ -295,10 +241,6 @@ struct MateOverviewView: View {
         .frame(maxHeight: .infinity, alignment: .top)
         .padding(.horizontal)
         .padding(.top, 20)
-    }
-    
-    func fakeIndex(_ of: Photo) -> Int {
-        return fakedPhotos.firstIndex(of: of) ?? 0
     }
     
     @ViewBuilder

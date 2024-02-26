@@ -145,6 +145,7 @@ struct MateCard: View {
                             .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 220, alignment: .bottom)
                             .clipShape(Rectangle())
                     }
+                    .tag(avatar.id.uuidString)
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -299,24 +300,19 @@ struct MateCard: View {
     
     func tapCalculate(_ location: CGPoint) {
         if location.x < 150 {
-            if indexOfPhoto > 0 {
-                withAnimation {
-                    indexOfPhoto -= 1
-                    currentPhoto = mateInfo.avatar[indexOfPhoto].name
-                }
-            }
-        } else if location.x > 150 && location.x < 300 {
+            indexOfPhoto = indexOfPhoto > 0 ? indexOfPhoto - 1 : (indexOfPhoto == 0 ? mateInfo.avatar.count - 1 : indexOfPhoto - 1)
+
+            currentPhoto = mateInfo.avatar[indexOfPhoto].id.uuidString
+            
+        }  else if location.x > 150 && location.x < 300 {
             withAnimation {
                 cardData.showMateProfile.toggle()
                 cardData.selectedMate = mateInfo
             }
-        } else if location.x > 300 {
-            if indexOfPhoto < mateInfo.avatar.count - 1 {
-                withAnimation {
-                    indexOfPhoto += 1
-                    currentPhoto = mateInfo.avatar[indexOfPhoto].name
-                }
-            }
+        } else if location.x > 250 {
+            indexOfPhoto = indexOfPhoto < mateInfo.avatar.count - 1 ? indexOfPhoto + 1 : (indexOfPhoto == mateInfo.avatar.count - 1 ? 0 : indexOfPhoto + 1)
+            
+            currentPhoto = mateInfo.avatar[indexOfPhoto].id.uuidString
         }
     }
 }
