@@ -12,10 +12,15 @@ struct Mate: Identifiable, Hashable {
     var name: String
     var age: Int
     var tags: [Tag]?
-    var avatar: [String]
+    var avatar: [Photo]
     var verified: Bool
     var gender: Genders
     var about: String = ""
     var city: String?
     var purpose: Purpose?
+}
+
+struct Photo: Identifiable, Hashable {
+    var id: UUID = .init()
+    var name: String
 }
