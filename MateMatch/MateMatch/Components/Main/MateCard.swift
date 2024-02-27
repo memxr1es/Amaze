@@ -300,7 +300,7 @@ struct MateCard: View {
     
     func tapCalculate(_ location: CGPoint) {
         if location.x < 150 {
-            indexOfPhoto = indexOfPhoto > 0 ? indexOfPhoto - 1 : (indexOfPhoto == 0 ? mateInfo.avatar.count - 1 : indexOfPhoto - 1)
+            indexOfPhoto = indexOfPhoto > 0 ? indexOfPhoto - 1 : 0
 
             currentPhoto = mateInfo.avatar[indexOfPhoto].id.uuidString
             
@@ -310,7 +310,7 @@ struct MateCard: View {
                 cardData.selectedMate = mateInfo
             }
         } else if location.x > 250 {
-            indexOfPhoto = indexOfPhoto < mateInfo.avatar.count - 1 ? indexOfPhoto + 1 : (indexOfPhoto == mateInfo.avatar.count - 1 ? 0 : indexOfPhoto + 1)
+            indexOfPhoto = indexOfPhoto < mateInfo.avatar.count - 1 ? indexOfPhoto + 1 : mateInfo.avatar.count - 1
             
             currentPhoto = mateInfo.avatar[indexOfPhoto].id.uuidString
         }

@@ -12,8 +12,17 @@ class UserViewModel: ObservableObject {
     
     @Published var completed: [String: Bool] = [:]
     
+    @Published var showPhoto: Bool = false
+    @Published var showBio: Bool = false
+    @Published var showStatus: Bool = false
+    @Published var showInfo: Bool = false
+    
+    @Published var valueOfSection: [String: Int] = [:]
+    @Published var fillCompleteValue: CGFloat = .zero
+    
     init() {
         fillCompleted()
+        calculateCircleProcent()
     }
     
     func fillCompleted() {
@@ -24,6 +33,20 @@ class UserViewModel: ObservableObject {
             "Твой статус": user.purpose == nil ? true : false,
             "Доп. инфо": user.city == nil ? true : false,
         ]
+        
+        valueOfSection = [
+            "Верификация": user.isVerified ? 20 : 0,
+            "Больше фото": user.userPhoto.count == 1 ? 24 : (user.userPhoto.count == 2 ? 18 : (user.userPhoto.count == 3 ? 12 : (user.userPhoto.count == 4 ? 6 : 0))),
+            "Личное био": user.about.isEmpty ? 0 : 30,
+            "Твой статус": user.purpose == nil ? 0 : 16,
+            "Доп. инфо": user.city == nil ? 0 : 8,
+        ]
+    }
+    
+    func calculateCircleProcent() {
+        fillCompleteValue = valueOfSection.compactMap { CGFloat($0.value) }.reduce(0, +).rounded()
+        
+        print(fillCompleteValue)
     }
 }
 

@@ -13,6 +13,7 @@ struct ChoicePurpose: View {
     
     @State var selectedPurpose: Purpose? = nil
     @EnvironmentObject var userVM: UserViewModel
+//    @StateObject var userVM = UserViewModel()
     
     var body: some View {
         VStack {

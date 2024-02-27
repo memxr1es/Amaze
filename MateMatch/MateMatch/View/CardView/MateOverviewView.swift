@@ -122,12 +122,12 @@ struct MateOverviewView: View {
     
     func tapCalculate(_ location: CGPoint) {
         if location.x < 150 {
-            indexOfPhoto = indexOfPhoto > 0 ? indexOfPhoto - 1 : (indexOfPhoto == 0 ? mate.avatar.count - 1 : indexOfPhoto - 1)
+            indexOfPhoto = indexOfPhoto > 0 ? indexOfPhoto - 1 : 0
 
             currentPhoto = mate.avatar[indexOfPhoto].id.uuidString
             
         } else if location.x > 250 {
-            indexOfPhoto = indexOfPhoto < mate.avatar.count - 1 ? indexOfPhoto + 1 : (indexOfPhoto == mate.avatar.count - 1 ? 0 : indexOfPhoto + 1)
+            indexOfPhoto = indexOfPhoto < mate.avatar.count - 1 ? indexOfPhoto + 1 : mate.avatar.count - 1
             
             currentPhoto = mate.avatar[indexOfPhoto].id.uuidString
         }

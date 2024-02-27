@@ -74,7 +74,7 @@ struct CompositionalView<Content, Item, ID>: View where Content:View, ID: Hashab
                         SafeView(row: row, index: 2)
                             .frame(height: height - 20)
                     }
-                    .frame(width: columnWidth - 30)
+                    .frame(width: abs(columnWidth - 30))
                 }
                 
                 if type == .type2 {

@@ -20,6 +20,8 @@ struct EditProfileView: View {
     @State private var characterLimit: Int = 500
     @State private var typedCharacters: Int = 0
     
+    @State private var progress: CGFloat = 0
+    
     @State var nextStep: Bool = false
     
     @Binding var path: [String]
@@ -40,6 +42,14 @@ struct EditProfileView: View {
             }
             .padding(.top, 100)
             .padding(.bottom, 50)
+            .onChange(of: userVM.user) { oldValue, newValue in
+                userVM.fillCompleted()
+                userVM.calculateCircleProcent()
+                
+                withAnimation {
+                    progress = (userVM.fillCompleteValue * 1.3).rounded()
+                }
+            }
         }
         .scrollIndicators(.hidden)
         .sheet(isPresented: $showChoice) {
@@ -47,12 +57,29 @@ struct EditProfileView: View {
                 .environmentObject(userVM)
                 .presentationDetents([.fraction(0.8)])
         }
+        .sheet(isPresented: $userVM.showInfo) {
+            ChangeInfo()
+                .environmentObject(userVM)
+                .presentationDetents([.height(300)])
+                .padding(.top, 40)
+                .padding(.bottom, 25)
+                .presentationCornerRadius(20)
+                .background(.white)
+        }
         .navigationBarTitleDisplayMode(.inline)
         .overlay {
             customNavBar
         }
         .background(Color.theme.bgColor.opacity(0.3))
         .background(Color.white)
+        .onAppear {
+            withAnimation {
+                progress = (userVM.fillCompleteValue * 1.3).rounded()
+            }
+        }
+        .onTapGesture {
+            isFocused = false
+        }
     }
     
     var userPhoto: some View {
@@ -85,7 +112,7 @@ struct EditProfileView: View {
                 
                 Spacer()
                 
-                Text(userVM.user.about.isEmpty ? "+8%" : "\(typedCharacters) / \(characterLimit)")
+                Text(userVM.user.about.isEmpty ? "+30%" : "\(typedCharacters) / \(characterLimit)")
                     .font(.system(size: 16, design: .rounded))
                     .foregroundStyle(.gray)
             }
@@ -118,6 +145,7 @@ struct EditProfileView: View {
                         }
                     }
                     .scrollContentBackground(.hidden)
+                    .tint(.black)
             }
             .frame(maxWidth: .infinity)
             .frame(height: 150)
@@ -144,7 +172,7 @@ struct EditProfileView: View {
                     
                     Spacer()
                     
-                    Text("+8%")
+                    Text("+20%")
                         .font(.system(size: 16, design: .rounded))
                         .foregroundStyle(.gray)
                 }
@@ -197,7 +225,7 @@ struct EditProfileView: View {
                 
                 Spacer()
                 
-                Text("+8%")
+                Text("+16%")
                     .font(.system(size: 16, design: .rounded))
                     .foregroundStyle(.gray)
             }
@@ -256,7 +284,7 @@ struct EditProfileView: View {
                 
                 Spacer()
                 
-                Text("+14%")
+                Text("+8%")
                     .font(.system(size: 16, design: .rounded))
                     .foregroundStyle(.gray)
             }
@@ -272,7 +300,7 @@ struct EditProfileView: View {
                         .foregroundStyle(.black)
                         .fontDesign(.rounded)
                     
-                    Text("Не выбрано")
+                    Text(userVM.user.city != nil ? userVM.user.city! : "Не выбрано")
                         .foregroundStyle(.gray)
                         .fontDesign(.rounded)
                 }
@@ -289,6 +317,9 @@ struct EditProfileView: View {
                     .shadow(color: Color.theme.bgColor.opacity(0.3), radius: 10)
             }
             .padding(.horizontal, 15)
+            .onTapGesture {
+                userVM.showInfo = true
+            }
         }
     }
     
@@ -316,7 +347,7 @@ struct EditProfileView: View {
                 Spacer()
                 
                 VStack {
-                    Text("Заполнен на 6%")
+                    Text("Заполнен на \(userVM.fillCompleteValue, specifier: "%.f")%")
                         .font(.system(size: 14, design: .rounded))
                         .foregroundStyle(Color(.systemGray))
                     
@@ -326,7 +357,7 @@ struct EditProfileView: View {
                             .foregroundStyle(Color.theme.bgColor)
                         
                         RoundedRectangle(cornerRadius: 30)
-                            .frame(width: 5, height: 4)
+                            .frame(width: progress, height: 4)
                             .foregroundStyle(.black)
                     }
                 }
