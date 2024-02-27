@@ -10,7 +10,9 @@ import SwiftUI
 struct CardView: View {
     
     @EnvironmentObject var cardData: CardsViewModel
+    
     @Binding var showParametersSheet: Bool
+    @Binding var path: [String]
     
     var body: some View {
         ZStack {
@@ -46,7 +48,6 @@ struct CardView: View {
                 .frame(height: 100)
                 .frame(maxHeight: .infinity, alignment: .top)
                 .padding(.top, -50)
-//                .ignoresSafeArea()
             
             HStack(alignment: .center) {
                 
@@ -71,7 +72,11 @@ struct CardView: View {
     @ViewBuilder
     func button(icon: String) -> some View {
         Button {
-            withAnimation { showParametersSheet.toggle() }
+            if icon == "bell" {
+                path.append("Notifications")
+            } else {
+                withAnimation { showParametersSheet.toggle() }
+            }
         } label: {
             Image(systemName: icon)
                 .font(.system(size: 18))

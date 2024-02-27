@@ -17,6 +17,7 @@ struct MainView: View {
     @State private var navigationPath: [String] = []
     
     @StateObject private var cardData = CardsViewModel()
+    @StateObject private var userVM = UserViewModel()
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -29,6 +30,13 @@ struct MainView: View {
 //                        .padding(.bottom, 10)
                         .background(.white)
                         .frame(maxHeight: .infinity, alignment: .bottom)
+                }
+                .navigationDestination(for: String.self) { navPath in
+                    if navPath == "Notifications" {
+                        NotificationView()
+                            .navigationBarBackButtonHidden()
+                            .environmentObject(userVM)
+                    }
                 }
             }
             .padding(.bottom, 20)
@@ -67,7 +75,7 @@ struct MainView: View {
     func switchViews(selectedTab: MenuTab, showParametersSheet: Bool) -> some View {
         switch selectedTab {
             case .main:
-                CardView(showParametersSheet: $showParametersSheet)
+                CardView(showParametersSheet: $showParametersSheet, path: $navigationPath)
                 .environmentObject(cardData)
                 .padding(.bottom, 20)
             case .overview:
@@ -76,6 +84,7 @@ struct MainView: View {
                 ChatView()
             case .profile:
                 ProfileView(path: $navigationPath)
+                .environmentObject(userVM)
         }
     }
 }

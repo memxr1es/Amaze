@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 @main
 struct MateMatchApp: App {
-    
+
     init() {
         let navBarAppearance = UINavigationBarAppearance()
         

@@ -10,12 +10,13 @@ import SwiftUI
 struct PhotoProfile: View {
     
     let main: Bool
-    
     let index: Int
+    @StateObject private var userVM = UserViewModel()
+    //    @EnvironmentObject private var userVM: UserViewModel
     
     var body: some View {
         if main {
-            Image("user-avatar")
+            Image(userVM.user.userPhoto[0])
                 .resizable()
                 .scaledToFill()
                 .frame(width: 210, height: 210)
@@ -34,14 +35,23 @@ struct PhotoProfile: View {
                         .padding(10)
                 }
                 .padding(10)
-//                .padding(.leading, 5)
+            //                .padding(.leading, 5)
         } else {
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color.theme.bgColor)
                 .frame(width: 100, height: 100)
                 .overlay {
-                    Image(systemName: "camera.fill")
-                        .foregroundStyle(.gray.opacity(0.3))
+                    if index > userVM.user.userPhoto.count - 1 {
+                        Image(systemName: "camera.fill")
+                            .foregroundStyle(.gray.opacity(0.3))
+                    }
+                    else {
+                        Image(userVM.user.userPhoto[index])
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 100, height: 100)
+                            .clipShape(RoundedRectangle(cornerRadius: 15))
+                    }
                     
                     Text("\(index)")
                         .font(.system(size: 10))
@@ -55,12 +65,12 @@ struct PhotoProfile: View {
                         .padding(5)
                         .padding(.leading, 5)
                 }
-//                .padding(.leading, 15)
         }
     }
 }
 
+
 #Preview {
-//    PhotoProfile(main: true, index: 0)
-    EditProfileView(path: .constant([]))
+    PhotoProfile(main: false, index: 1)
+//    EditProfileView(path: .constant([]))
 }

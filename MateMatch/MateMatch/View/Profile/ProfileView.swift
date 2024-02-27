@@ -49,7 +49,7 @@ struct ProfileView: View {
     @State private var showSheet: Bool = false
     
     @StateObject var sections = SectionsViewModel()
-    @StateObject var userVM = UserViewModel()
+    @EnvironmentObject var userVM: UserViewModel
 
     @Binding var path: [String]
     
@@ -139,7 +139,11 @@ struct ProfileView: View {
                 OverviewProfileView(path: $path)
                     .navigationBarBackButtonHidden()
                     .environmentObject(userVM)
-            } 
+            } else if navPath == "Notifications" {
+                NotificationView()
+                    .navigationBarBackButtonHidden()
+                    .environmentObject(userVM)
+            }
         }
         .onAppear {
             withAnimation {
@@ -334,7 +338,7 @@ struct ProfileView: View {
     
     @ViewBuilder
     func button(icon: String) -> some View {
-        NavigationLink(value: "Settings") {
+        NavigationLink(value: icon == "bell" ? "Notifications" : "Settings") {
             Image(systemName: icon)
                 .font(.system(size: 16))
                 .frame(width: 40, height: 40)

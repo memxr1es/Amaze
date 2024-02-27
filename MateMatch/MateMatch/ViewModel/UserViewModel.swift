@@ -20,6 +20,9 @@ class UserViewModel: ObservableObject {
     @Published var valueOfSection: [String: Int] = [:]
     @Published var fillCompleteValue: CGFloat = .zero
     
+    @Published var userNotification: Bool = false
+    @Published var userPermissionsDenied: Bool = false
+    
     init() {
         fillCompleted()
     }
