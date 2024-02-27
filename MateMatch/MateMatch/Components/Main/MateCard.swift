@@ -304,7 +304,7 @@ struct MateCard: View {
 
             currentPhoto = mateInfo.avatar[indexOfPhoto].id.uuidString
             
-        }  else if location.x > 150 && location.x < 300 {
+        }  else if location.x > 150 && location.x < 250 {
             withAnimation {
                 cardData.showMateProfile.toggle()
                 cardData.selectedMate = mateInfo

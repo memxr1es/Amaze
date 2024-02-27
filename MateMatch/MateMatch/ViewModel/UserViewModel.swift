@@ -22,7 +22,6 @@ class UserViewModel: ObservableObject {
     
     init() {
         fillCompleted()
-        calculateCircleProcent()
     }
     
     func fillCompleted() {
@@ -41,12 +40,12 @@ class UserViewModel: ObservableObject {
             "Твой статус": user.purpose == nil ? 0 : 16,
             "Доп. инфо": user.city == nil ? 0 : 8,
         ]
+        
+        calculateCircleProcent()
     }
     
     func calculateCircleProcent() {
         fillCompleteValue = valueOfSection.compactMap { CGFloat($0.value) }.reduce(0, +).rounded()
-        
-        print(fillCompleteValue)
     }
 }
 

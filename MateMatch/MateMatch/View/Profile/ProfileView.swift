@@ -87,7 +87,7 @@ struct ProfileView: View {
         .sheet(isPresented: $showSheet, content: {
             ChangeInfo()
                 .environmentObject(userVM)
-                .presentationDetents([.height(userVM.showPhoto ? 520 : (userVM.showStatus ? 570 : (userVM.showInfo ? 300 : 340)))])
+                .presentationDetents([.height(userVM.showPhoto ? 520 : (userVM.showStatus ? 590 : (userVM.showInfo ? 300 : 340)))])
                 .padding(.top, 40)
                 .padding(.bottom, 25)
                 .presentationCornerRadius(20)
@@ -143,15 +143,13 @@ struct ProfileView: View {
         }
         .onAppear {
             withAnimation {
-                userVM.calculateCircleProcent()
+                userVM.fillCompleted()
                 circleValue = userVM.fillCompleteValue
             }
         }
         .onChange(of: userVM.user) { oldValue, newValue in
-            userVM.calculateCircleProcent()
+            userVM.fillCompleted()
             circleValue = userVM.fillCompleteValue
-            
-            print(circleValue)
         }
     }
     

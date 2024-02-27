@@ -44,7 +44,6 @@ struct EditProfileView: View {
             .padding(.bottom, 50)
             .onChange(of: userVM.user) { oldValue, newValue in
                 userVM.fillCompleted()
-                userVM.calculateCircleProcent()
                 
                 withAnimation {
                     progress = (userVM.fillCompleteValue * 1.3).rounded()
