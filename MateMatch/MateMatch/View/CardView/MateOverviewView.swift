@@ -16,7 +16,6 @@ struct MateOverviewView: View {
     @State private var currentPhoto: String = ""
     @State private var indexOfPhoto: Int = 0
     
-//    @StateObject var cardData = CardsViewModel()
     @EnvironmentObject var cardData: CardsViewModel
     
     var body: some View {
@@ -100,25 +99,38 @@ struct MateOverviewView: View {
     
     var userPhoto: some View {
         TabView(selection: $currentPhoto) {
-            ForEach(mate.avatar, id: \.self) { avatar in
+            ForEach(mate.avatar) { avatar in
                 RoundedRectangle(cornerRadius: 0)
                     .fill(.radialGradient(Gradient(colors: [.clear, .black]), center: .center, startRadius: 250, endRadius: 400))
                     .background {
-                        Image(avatar)
+                        Image(avatar.name)
                             .resizable()
                             .scaledToFill()
                             .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 250, alignment: .bottom)
                             .clipShape(Rectangle())
                     }
+                    .tag(avatar.id.uuidString)
             }
         }
         .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 250)
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-        .animation(.easeInOut, value: currentPhoto)
-        .transition(.slide)
+        .animation(.default, value: currentPhoto)
         .clipShape(RoundedRectangle(cornerRadius: 15))
         .overlay(shortAboutUser)
         .overlay(photoSlider)
+    }
+    
+    func tapCalculate(_ location: CGPoint) {
+        if location.x < 150 {
+            indexOfPhoto = indexOfPhoto > 0 ? indexOfPhoto - 1 : 0
+
+            currentPhoto = mate.avatar[indexOfPhoto].id.uuidString
+            
+        } else if location.x > 250 {
+            indexOfPhoto = indexOfPhoto < mate.avatar.count - 1 ? indexOfPhoto + 1 : mate.avatar.count - 1
+            
+            currentPhoto = mate.avatar[indexOfPhoto].id.uuidString
+        }
     }
     
     var shortAboutUser: some View {
@@ -231,25 +243,6 @@ struct MateOverviewView: View {
         .padding(.top, 20)
     }
     
-    func tapCalculate(_ location: CGPoint) {
-        if location.x < 150 {
-            if indexOfPhoto > 0 {
-                withAnimation {
-                    indexOfPhoto -= 1
-                    currentPhoto = mate.avatar[indexOfPhoto]
-                }
-            }
-        } else if location.x > 300 {
-            if indexOfPhoto < mate.avatar.count - 1 {
-                withAnimation {
-                    indexOfPhoto += 1
-                    currentPhoto = mate.avatar[indexOfPhoto]
-                }
-            }
-        }
-    }
-    
-    
     @ViewBuilder
     func bottomButtons(_ type: TypeOfBottomButton) -> some View {
         Button {
@@ -288,7 +281,7 @@ struct MateOverviewView: View {
 }
 
 #Preview {
-    MateOverviewView(mate: MOCK_MATE[1])
+    MateOverviewView(mate: MOCK_MATE[0])
 }
 
 enum TypeOfBottomButton: String, CaseIterable {

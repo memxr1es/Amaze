@@ -21,7 +21,7 @@ struct CircularProgressView: View {
                 )
             
             Circle()
-                .trim(from: 0, to: value)
+                .trim(from: 0, to: value / 100)
                 .stroke ( // Progress Circle
                     color,
                     style: StrokeStyle(
@@ -38,15 +38,18 @@ struct CircularProgressView: View {
 
 struct ProfileView: View {
     
-    @State private var value: CGFloat = .zero
+    @State private var circleValue: CGFloat = .zero
+    
     @State private var showQRCode: Bool = false
     @State private var testSystem: Bool = false
     
     @State private var showMore: Bool = false
     @State private var testShow: Bool = false
     
+    @State private var showSheet: Bool = false
+    
     @StateObject var sections = SectionsViewModel()
-    @StateObject var userVM = UserViewModel()
+    @EnvironmentObject var userVM: UserViewModel
 
     @Binding var path: [String]
     
@@ -69,10 +72,8 @@ struct ProfileView: View {
                 .frame(maxHeight: .infinity, alignment: .top)
                 .padding(.top, 50)
                 .padding(.bottom, 100)
-                
             }
             .disabled(showQRCode)
-            .onAppear { value = 0.63 }
             .onDisappear {
                 showQRCode = false
                 
@@ -83,6 +84,15 @@ struct ProfileView: View {
             header
                 .frame(maxHeight: .infinity, alignment: .top)
         }
+        .sheet(isPresented: $showSheet, content: {
+            ChangeInfo()
+                .environmentObject(userVM)
+                .presentationDetents([.height(userVM.showPhoto ? 520 : (userVM.showStatus ? 590 : (userVM.showInfo ? 300 : 340)))])
+                .padding(.top, 40)
+                .padding(.bottom, 25)
+                .presentationCornerRadius(20)
+                .background(.white)
+        })
         .background(Color.theme.bgColor)
         .overlay {
             QRCodeView(showQRCode: $showQRCode)
@@ -129,7 +139,21 @@ struct ProfileView: View {
                 OverviewProfileView(path: $path)
                     .navigationBarBackButtonHidden()
                     .environmentObject(userVM)
+            } else if navPath == "Notifications" {
+                NotificationView()
+                    .navigationBarBackButtonHidden()
+                    .environmentObject(userVM)
             }
+        }
+        .onAppear {
+            withAnimation {
+                userVM.fillCompleted()
+                circleValue = userVM.fillCompleteValue
+            }
+        }
+        .onChange(of: userVM.user) { oldValue, newValue in
+            userVM.fillCompleted()
+            circleValue = userVM.fillCompleteValue
         }
     }
     
@@ -214,10 +238,10 @@ struct ProfileView: View {
         VStack {
             HStack {
                 ZStack {
-                    CircularProgressView(value: value)
+                    CircularProgressView(value: circleValue)
                         .frame(width: 70, height: 70)
                     
-                    Text("\(value * 100, specifier: "%.0f")%")
+                    Text("\(userVM.fillCompleteValue, specifier: "%.f")%")
                         .font(.system(size: 18, weight: .semibold, design: .rounded))
                         .foregroundStyle(Color.theme.mainColor)
                 }
@@ -244,7 +268,7 @@ struct ProfileView: View {
             }
             
             if showMore {
-                MoreInfo()
+                MoreInfo(showSheet: $showSheet)
                     .environmentObject(userVM)
                     .padding(.horizontal, 10)
             }
@@ -314,7 +338,7 @@ struct ProfileView: View {
     
     @ViewBuilder
     func button(icon: String) -> some View {
-        NavigationLink(value: "Settings") {
+        NavigationLink(value: icon == "bell" ? "Notifications" : "Settings") {
             Image(systemName: icon)
                 .font(.system(size: 16))
                 .frame(width: 40, height: 40)

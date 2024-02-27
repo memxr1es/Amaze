@@ -203,7 +203,7 @@ struct OverviewProfileView: View {
                     currentPhoto = userVM.user.userPhoto[indexOfPhoto]
                 }
             }
-        } else if location.x > 300 {
+        } else if location.x > 250 {
             if indexOfPhoto < userVM.user.userPhoto.count - 1 {
                 withAnimation {
                     indexOfPhoto += 1

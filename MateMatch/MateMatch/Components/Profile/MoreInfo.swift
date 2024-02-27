@@ -9,7 +9,11 @@ import SwiftUI
 
 struct MoreInfo: View {
     
-    @StateObject var userVM = UserViewModel()
+//    @StateObject var userVM =  UserViewModel()
+    @EnvironmentObject var userVM: UserViewModel
+    
+    @Binding var showSheet: Bool
+    @State private var reset: Bool = true
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -29,64 +33,102 @@ struct MoreInfo: View {
                             }
                             .padding(.top, 35)
                             
-                            Button {
-                                switch category {
-                                    case .verification: print("2")
+                            if category == .verification {
+                                NavigationLink(value: category.navigationLinkValue) {
+                                    HStack {
+                                        Text(category == .verification ? "Пройти" : "Добавить")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.black)
                                         
-                                    default: print("1")
+                                        
+                                        Image(systemName: category == .verification ? "" : "plus")
+                                            .font(.system(size: 14))
+                                            .foregroundStyle(.black)
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding(10)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 30)
+                                            .fill(.white)
+                                    }
+                                    .padding(.top, 10)
                                 }
-                            }
-                            label: {
-                                HStack {
-                                    Text(category == .verification ? "Пройти" : "Добавить")
-                                        .font(.system(size: 12, design: .rounded))
-                                        .foregroundStyle(.black)
-                                    
-                                    
-                                    Image(systemName: category == .verification ? "" : "plus")
-                                        .font(.system(size: 14))
-                                        .foregroundStyle(.black)
+                                .padding(.trailing, -20)
+                                .buttonStyle(DefaultButtonStyle())
+                            } else {
+                                Button {
+                                    switch category {
+                                    case .verification: return
+                                    case .morePhoto: withAnimation {
+                                        userVM.showPhoto.toggle()
+                                        showSheet = true
+                                    }
+                                    case .bio: withAnimation {
+                                        userVM.showBio.toggle()
+                                        showSheet = true
+                                    }
+                                    case .status: withAnimation {
+                                        userVM.showStatus.toggle()
+                                        showSheet = true
+                                    }
+                                    case .addInformation: withAnimation {
+                                        userVM.showInfo.toggle()
+                                        showSheet = true
+                                    }
+                                    }
+                                } label: {
+                                    HStack {
+                                        Text(category == .verification ? "Пройти" : "Добавить")
+                                            .font(.system(size: 12, design: .rounded))
+                                            .foregroundStyle(.black)
+                                        
+                                        
+                                        Image(systemName: category == .verification ? "" : "plus")
+                                            .font(.system(size: 14))
+                                            .foregroundStyle(.black)
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding(10)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 30)
+                                            .fill(.white)
+                                    }
+                                    .padding(.top, 10)
                                 }
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(10)
-                                .background {
-                                    RoundedRectangle(cornerRadius: 30)
-                                        .fill(.white)
-                                }
-                                .padding(.top, 10)
+                                .padding(.trailing, -20)
+                                .buttonStyle(DefaultButtonStyle())
                             }
-                            .padding(.trailing, -20)
+                        }
+                        .frame(width: 110, height: 150, alignment: .topLeading)
+                        .padding(.top)
+                        .padding(.horizontal, 10)
+                        .padding(.trailing, 20)
+                        .background {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(Color.theme.mainColor.opacity(0.1))
+                        }
+                        .padding()
+                        .overlay {
+                            ZStack {
+                                Image(systemName: category.icon)
+                                    .font(.system(size: 24))
+                                    .foregroundStyle(Color.theme.mainColor)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                                    .padding(30)
+                                
+                                Text("+\(category.percentageForEach)%")
+                                    .font(.system(size: 14, design: .rounded))
+                                    .foregroundStyle(.gray)
+                                    .frame(width: 55, height: 25)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .fill(.white)
+                                    }
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                                    .padding(30)
                             }
-                            .frame(width: 110, height: 150, alignment: .topLeading)
-                            .padding(.top)
-                            .padding(.horizontal, 10)
-                            .padding(.trailing, 20)
-                            .background {
-                                RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color.theme.mainColor.opacity(0.1))
-                            }
-                            .padding()
-                            .overlay {
-                                ZStack {
-                                    Image(systemName: category.icon)
-                                        .font(.system(size: 24))
-                                        .foregroundStyle(Color.theme.mainColor)
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                                        .padding(30)
-                                    
-                                    Text("+\(category.percentageForEach)%")
-                                        .font(.system(size: 14, design: .rounded))
-                                        .foregroundStyle(.gray)
-                                        .frame(width: 55, height: 25)
-                                        .background {
-                                            RoundedRectangle(cornerRadius: 5)
-                                                .fill(.white)
-                                        }
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                                        .padding(30)
-                                }
-                            }
-                            .padding(.horizontal, -10)
+                        }
+                        .padding(.horizontal, -10)
                     }
                 }
                 ForEach(Category.allCases, id: \.self) { category in
@@ -104,26 +146,68 @@ struct MoreInfo: View {
                             }
                             .padding(.top, 35)
                             
-                            Button {}
-                        label: {
-                            HStack {
-                                Text("Заполнено")
-                                    .font(.system(size: 12, design: .rounded))
+                            if category == .verification {
+                                NavigationLink(value: category.navigationLinkValue) {
+                                    HStack {
+                                        Text("Заполнено")
+                                            .font(.system(size: 12, design: .rounded))
+                                        
+                                        
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 14))
+                                    }
+                                    .foregroundStyle(.black.opacity(0.5))
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding(10)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 30)
+                                            .fill(.white)
+                                    }
+                                    .padding(.top, 10)
+                                }
+                                .padding(.trailing, -20)
                                 
-                                
-                                Image(systemName: "checkmark")
-                                    .font(.system(size: 14))
+                            } else {
+                                Button {
+                                    switch category {
+                                    case .verification: return
+                                    case .morePhoto: withAnimation {
+                                        userVM.showPhoto.toggle()
+                                        showSheet = true
+                                    }
+                                    case .bio: withAnimation {
+                                        userVM.showBio.toggle()
+                                        showSheet = true
+                                    }
+                                    case .status: withAnimation {
+                                        userVM.showStatus.toggle()
+                                        showSheet = true
+                                    }
+                                    case .addInformation: withAnimation {
+                                        userVM.showInfo.toggle()
+                                        showSheet = true
+                                    }
+                                    }
+                                } label: {
+                                    HStack {
+                                        Text("Заполнено")
+                                            .font(.system(size: 12, design: .rounded))
+                                        
+                                        
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 14))
+                                    }
+                                    .foregroundStyle(.black.opacity(0.5))
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding(10)
+                                    .background {
+                                        RoundedRectangle(cornerRadius: 30)
+                                            .fill(.white)
+                                    }
+                                    .padding(.top, 10)
+                                }
+                                .padding(.trailing, -20)
                             }
-                            .foregroundStyle(.black.opacity(0.5))
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(10)
-                            .background {
-                                RoundedRectangle(cornerRadius: 30)
-                                    .fill(.white)
-                            }
-                            .padding(.top, 10)
-                        }
-                        .padding(.trailing, -20)
                         }
                         .frame(width: 110, height: 150, alignment: .topLeading)
                         .padding(.top)
@@ -143,17 +227,21 @@ struct MoreInfo: View {
                         }
                         .padding(.horizontal, -10)
                     }
+                    
                 }
             }
         }
         .onAppear {
             userVM.fillCompleted()
         }
+        .onChange(of: userVM.user) { oldValue, newValue in
+            userVM.fillCompleted()
+        }
     }
 }
 
 #Preview {
-    MoreInfo()
+    MoreInfo(showSheet: .constant(false))
 }
 
 enum Category: String, CaseIterable {
@@ -175,11 +263,11 @@ enum Category: String, CaseIterable {
     
     var percentageForEach: Int {
         switch self {
-            case .verification: return 8
+            case .verification: return 20
             case .morePhoto: return 30
-            case .bio: return 50
-            case .status: return 8
-            case .addInformation: return 4
+            case .bio: return 30
+            case .status: return 16
+            case .addInformation: return 8
         }
     }
     
@@ -200,6 +288,16 @@ enum Category: String, CaseIterable {
             case .bio: return "Расскажи о своих лучших сторонах"
             case .status: return "Расскрой карты, кого ты ищешь?"
             case .addInformation: return "Вдруг тебя захотят найти...?)"
+        }
+    }
+    
+    var navigationLinkValue: String {
+        switch self {
+            case .verification: return "First Step"
+            case .morePhoto: return "Change Photo"
+            case .bio: return "Change Bio"
+            case .status: return "Change Status"
+            case .addInformation: return "Change City"
         }
     }
 }

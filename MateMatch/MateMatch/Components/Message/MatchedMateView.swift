@@ -13,7 +13,7 @@ struct MatchedMateView: View {
     
     var body: some View {
         VStack {
-            Image(mate.avatar.first!)
+            Image(mate.avatar.first!.name)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 70, height: 70)

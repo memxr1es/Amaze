@@ -139,12 +139,13 @@ struct MateCard: View {
                 Rectangle()
                     .fill(.radialGradient(Gradient(colors: [.clear, .black]), center: .center, startRadius: 250, endRadius: 400))
                     .background {
-                        Image(avatar)
+                        Image(avatar.name)
                             .resizable()
                             .scaledToFill()
                             .frame(width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - 220, alignment: .bottom)
                             .clipShape(Rectangle())
                     }
+                    .tag(avatar.id.uuidString)
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -299,24 +300,19 @@ struct MateCard: View {
     
     func tapCalculate(_ location: CGPoint) {
         if location.x < 150 {
-            if indexOfPhoto > 0 {
-                withAnimation {
-                    indexOfPhoto -= 1
-                    currentPhoto = mateInfo.avatar[indexOfPhoto]
-                }
-            }
-        } else if location.x > 150 && location.x < 300 {
+            indexOfPhoto = indexOfPhoto > 0 ? indexOfPhoto - 1 : 0
+
+            currentPhoto = mateInfo.avatar[indexOfPhoto].id.uuidString
+            
+        }  else if location.x > 150 && location.x < 250 {
             withAnimation {
                 cardData.showMateProfile.toggle()
                 cardData.selectedMate = mateInfo
             }
-        } else if location.x > 300 {
-            if indexOfPhoto < mateInfo.avatar.count - 1 {
-                withAnimation {
-                    indexOfPhoto += 1
-                    currentPhoto = mateInfo.avatar[indexOfPhoto]
-                }
-            }
+        } else if location.x > 250 {
+            indexOfPhoto = indexOfPhoto < mateInfo.avatar.count - 1 ? indexOfPhoto + 1 : mateInfo.avatar.count - 1
+            
+            currentPhoto = mateInfo.avatar[indexOfPhoto].id.uuidString
         }
     }
 }
@@ -332,12 +328,11 @@ struct PressEffectButtonStyle_Choice: ButtonStyle {
 }
 
 let MOCK_MATE = [
-    Mate(name: "Никита", age: 21, tags: [Tag(tag: .apexLegends), Tag(tag: .backrooms), Tag(tag: .dota), Tag(tag: .counterStrike), Tag(tag: .leagueOfLegends)], avatar: ["user-avatar"], verified: true, gender: .male),
-    Mate(name: "Данил", age: 22, tags: [Tag(tag: .brawlStars), Tag(tag: .phasmofobia), Tag(tag: .rocketLeague), Tag(tag: .standoff)], avatar: ["user-avatar-2", "user-avatar"], verified: true, gender: .male, city: "Москва", purpose: .stream),
-    Mate(name: "Настя", age: 16, tags: [Tag(tag: .dota), Tag(tag: .leagueOfLegends)], avatar: ["user-avatar-3"], verified: false, gender: .female, city: "Москва"),
-    Mate(name: "Даша", age: 25, avatar: ["user-avatar-4"], verified: false, gender: .female),
-    Mate(name: "Иван", age: 18, tags: [Tag(tag: .counterStrike), Tag(tag: .apexLegends), Tag(tag: .standoff)], avatar: ["user-avatar-5"], verified: false, gender: .male),
-    Mate(name: "Дима", age: 20, tags: [Tag(tag: .phasmofobia), Tag(tag: .minecraft), Tag(tag: .backrooms), Tag(tag: .rocketLeague)], avatar: ["user-avatar-6"], verified: true, gender: .male, city: "Санкт-Петербург", purpose: .mate)
+    Mate(name: "Данил", age: 22, tags: [Tag(tag: .brawlStars), Tag(tag: .phasmofobia), Tag(tag: .rocketLeague), Tag(tag: .standoff)], avatar: [Photo(name: "user-avatar-2"), Photo(name: "xxx"), Photo(name: "xxx-2")], verified: true, gender: .male, city: "Москва", purpose: .stream),
+    Mate(name: "Настя", age: 16, tags: [Tag(tag: .dota), Tag(tag: .leagueOfLegends)], avatar: [Photo(name: "user-avatar-3"), Photo(name: "user-avatar-7")], verified: false, gender: .female, city: "Москва"),
+    Mate(name: "Даша", age: 25, avatar: [Photo(name: "user-avatar-4"), Photo(name: "user-avatar-8")], verified: false, gender: .female),
+    Mate(name: "Иван", age: 18, tags: [Tag(tag: .counterStrike), Tag(tag: .apexLegends), Tag(tag: .standoff)], avatar: [Photo(name: "user-avatar-5"), Photo(name: "user-avatar-9")], verified: false, gender: .male),
+    Mate(name: "Дима", age: 20, tags: [Tag(tag: .phasmofobia), Tag(tag: .minecraft), Tag(tag: .backrooms), Tag(tag: .rocketLeague)], avatar: [Photo(name: "user-avatar-6"), Photo(name: "user-avatar-10")], verified: true, gender: .male, city: "Санкт-Петербург", purpose: .mate)
 ]
 
 #Preview {
