@@ -28,7 +28,7 @@ struct MatchedMateView: View {
             
             Text(mate.name)
                 .font(.system(size: 16, weight: .regular, design: .rounded))
-                .foregroundStyle(.black)
+                .foregroundStyle(.black.opacity(0.7))
         }
     }
 }

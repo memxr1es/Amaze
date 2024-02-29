@@ -53,6 +53,10 @@ struct ProfileView: View {
 
     @Binding var path: [String]
     
+    private func timeConsumingCalculation() -> Int {
+        (1 ... 10_000_000).reduce(0, +)
+    }
+    
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
             ZStack(alignment: .top) {
@@ -60,7 +64,7 @@ struct ProfileView: View {
                 Color.theme.bgColor.ignoresSafeArea()
                 
                 
-                VStack(spacing: 5) {
+                LazyVStack(spacing: 5) {
                     
                     profileSection
                     
@@ -145,15 +149,17 @@ struct ProfileView: View {
                     .environmentObject(userVM)
             }
         }
-        .onAppear {
+        .task {
             withAnimation {
                 userVM.fillCompleted()
                 circleValue = userVM.fillCompleteValue
             }
         }
         .onChange(of: userVM.user) { oldValue, newValue in
-            userVM.fillCompleted()
-            circleValue = userVM.fillCompleteValue
+            DispatchQueue.main.async {
+                userVM.fillCompleted()
+                circleValue = userVM.fillCompleteValue
+            }
         }
     }
     
@@ -182,7 +188,7 @@ struct ProfileView: View {
     }
     
     var profileSection: some View {
-        VStack {
+        LazyVStack {
             NavigationLink(value: "Profile Overview") {
                 HStack(spacing: 15) {
                     Image("user-avatar")
@@ -192,7 +198,7 @@ struct ProfileView: View {
                         .clipShape(Circle())
                     
                     
-                    VStack(alignment: .leading, spacing: 5) {
+                    LazyVStack(alignment: .leading, spacing: 5) {
                         HStack {
                             Text(userVM.user.firstName)
                                 .font(.system(size: 26, weight: .semibold, design: .rounded))
@@ -216,7 +222,7 @@ struct ProfileView: View {
                 .padding(.top)
             }
             
-            HStack {
+            LazyHStack {
                 buttonProfile(icon: "pencil.and.scribble", text: "Изменить", alignment: false)
                 
                 Spacer()
@@ -235,7 +241,7 @@ struct ProfileView: View {
     }
     
     var fillProfile: some View {
-        VStack {
+        LazyVStack {
             HStack {
                 ZStack {
                     CircularProgressView(value: circleValue)
@@ -283,8 +289,8 @@ struct ProfileView: View {
     }
     
     var checkCompatibility: some View {
-        VStack(spacing: 15) {
-            HStack(spacing: 20) {
+        LazyVStack(spacing: 15) {
+            LazyHStack(spacing: 20) {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Что общего?")
                         .font(.system(size: 20, weight: .semibold, design: .rounded))

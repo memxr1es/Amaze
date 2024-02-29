@@ -10,6 +10,8 @@ import UserNotifications
 
 @main
 struct MateMatchApp: App {
+    
+    @StateObject private var launchScreenState = LaunchScreenStateManager()
 
     init() {
         let navBarAppearance = UINavigationBarAppearance()
@@ -25,13 +27,15 @@ struct MateMatchApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainView()
+            ZStack {
+                MainView()
+                
+                if launchScreenState.state != .finished {
+                    SplashScreenView()
+                }
+            }
+            .environmentObject(launchScreenState)
         }
     }
 }
 
-#Preview {
-    NavigationStack {
-        EditProfileView(path: .constant([]))
-    }
-}

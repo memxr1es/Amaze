@@ -10,6 +10,7 @@ import SwiftUI
 struct MateOverviewView: View {
 
     let mate: Mate
+    let fromChatView: Bool
     
     @State private var onAppear: Bool = false
     
@@ -17,6 +18,7 @@ struct MateOverviewView: View {
     @State private var indexOfPhoto: Int = 0
     
     @EnvironmentObject var cardData: CardsViewModel
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -65,8 +67,10 @@ struct MateOverviewView: View {
                 .foregroundStyle(.black)
                 .padding(.leading)
                 .onTapGesture {
-                    withAnimation {
-                        cardData.showMateProfile.toggle()
+                    if fromChatView {
+                        dismiss()
+                    } else {
+                        withAnimation { cardData.showMateProfile.toggle() }
                     }
                 }
             
@@ -196,12 +200,28 @@ struct MateOverviewView: View {
     
     var bottomButtons: some View {
         HStack {
-            ForEach(TypeOfBottomButton.allCases, id: \.self) { type in
-                bottomButtons(type)
-                    .scaleEffect(onAppear ? 1 : 0)
-                
-                if type == .dislike {
-                    Spacer()
+            if fromChatView {
+                Button {
+                    withAnimation(.smooth) { dismiss() }
+                } label: {
+                    Image(systemName: "ellipsis.message.fill")
+                        .font(.system(size: 22))
+                        .foregroundStyle(.white)
+                        .padding(15)
+                        .background {
+                            Circle()
+                                .fill(.black.opacity(0.9))
+                        }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+            } else {
+                ForEach(TypeOfBottomButton.allCases, id: \.self) { type in
+                    bottomButtons(type)
+                        .scaleEffect(onAppear ? 1 : 0)
+                    
+                    if type == .dislike {
+                        Spacer()
+                    }
                 }
             }
         }
@@ -281,7 +301,7 @@ struct MateOverviewView: View {
 }
 
 #Preview {
-    MateOverviewView(mate: MOCK_MATE[0])
+    MateOverviewView(mate: MOCK_MATE[0], fromChatView: true)
 }
 
 enum TypeOfBottomButton: String, CaseIterable {
