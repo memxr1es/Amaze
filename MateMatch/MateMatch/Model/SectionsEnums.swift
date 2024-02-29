@@ -76,6 +76,7 @@ enum MainSections: String, CaseIterable {
 enum ApplicationSections: String, CaseIterable {
     case loginMethods = "Способы входа"
     case notifications = "Уведомления"
+    case chats = "Чаты"
     case language = "Язык"
     case blackList = "Черный список"
     case FAQ = "FAQ"
@@ -86,6 +87,7 @@ enum ApplicationSections: String, CaseIterable {
         switch self {
             case .loginMethods: return "person.2"
             case .notifications: return "bell"
+            case .chats: return "ellipsis.message"
             case .language: return "network"
             case .blackList: return "lock"
             case .FAQ: return "questionmark.circle"

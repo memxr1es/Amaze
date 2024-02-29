@@ -13,6 +13,7 @@ struct CorrespondenceView: View {
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var cardData: CardsViewModel
+    @EnvironmentObject private var chatVM: ChatAppearanceViewModel
 //    @StateObject private var cardData: CardsViewModel = CardsViewModel()
     
     @State private var randomHour: Int = 0
@@ -38,12 +39,12 @@ struct CorrespondenceView: View {
         .padding(.top, 60)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
-            Color.theme.bgColor
+            chatVM.selectedColorBackground
             
-            Image("chat-wallpaper")
+            Image(chatVM.selectedBackgroundImage)
                 .resizable()
                 .scaledToFill()
-                .opacity(0.05)
+                .foregroundStyle(chatVM.selectedColorPhoto)
         }
         .overlay(header)
         .onAppear {
@@ -180,4 +181,6 @@ struct CorrespondenceView: View {
 
 #Preview {
     CorrespondenceView(mate: MOCK_MATE[0], path: .constant([]))
+        .environmentObject(CardsViewModel())
+        .environmentObject(ChatAppearanceViewModel())
 }

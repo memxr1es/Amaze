@@ -18,6 +18,7 @@ struct MainView: View {
     
     @StateObject private var cardData = CardsViewModel()
     @StateObject private var userVM = UserViewModel()
+    @StateObject private var chatVM = ChatAppearanceViewModel()
     
     @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
     
@@ -96,13 +97,16 @@ struct MainView: View {
                 EmptyView()
             case .message:
                 ChatView()
+                .environmentObject(chatVM)
             case .profile:
                 ProfileView(path: $navigationPath)
                 .environmentObject(userVM)
+                .environmentObject(chatVM)
         }
     }
 }
 
 #Preview {
     MainView()
+        .environmentObject(LaunchScreenStateManager())
 }

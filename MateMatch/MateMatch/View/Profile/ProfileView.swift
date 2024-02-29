@@ -50,6 +50,7 @@ struct ProfileView: View {
     
     @StateObject var sections = SectionsViewModel()
     @EnvironmentObject var userVM: UserViewModel
+    @EnvironmentObject var chatVM: ChatAppearanceViewModel
 
     @Binding var path: [String]
     
@@ -126,6 +127,7 @@ struct ProfileView: View {
                 ChangeAppInfoView(path: $path)
                     .navigationBarBackButtonHidden()
                     .environmentObject(sections)
+                    .environmentObject(chatVM)
             } else if navPath == "Main Section" {
                 ChangeMainInfoView(path: $path)
                     .navigationBarBackButtonHidden()
@@ -408,4 +410,5 @@ struct ProfileView: View {
 
 #Preview {
     MainView()
+        .environmentObject(LaunchScreenStateManager())
 }

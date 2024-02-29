@@ -39,7 +39,7 @@ class SectionsViewModel: ObservableObject {
         SectionDataModel(name: "Отправка жалоб", description: "Ты можешь пожаловаться на пользователя, если он ведет себя грубо или содержание его профиля кажется тебе оскорбительным. Перейди в раздел \"...\" в профиле пользователя, выбери \"Пожаловаться\" и укажи причину жалобы. Мы обязательно рассмотрим твою заявку."),
     ]
     
-    @Published var selectedAppSection: ApplicationSections = .notifications
+    @Published var selectedAppSection: ApplicationSections = .chats
     @Published var selectedFAQSection: FAQ = .logSignUP
     @Published var selectedSection: MainSections = .name
     @Published var selectedPrice: PricePremium = .oneWeek

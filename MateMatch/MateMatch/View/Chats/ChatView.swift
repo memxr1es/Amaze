@@ -10,6 +10,7 @@ import SwiftUI
 struct ChatView: View {
     
     @StateObject var cardData = CardsViewModel()
+    @EnvironmentObject private var chatVM: ChatAppearanceViewModel
     
     @State private var navigationPath: [String] = []
     
@@ -88,6 +89,8 @@ struct ChatView: View {
                     CorrespondenceView(mate: cardData.selectedMate!, path: $navigationPath)
                         .navigationBarBackButtonHidden()
                         .environmentObject(cardData)
+                        .environmentObject(chatVM)
+                    
                 } else if navPath == "Mate Profile" {
                     MateOverviewView(mate: cardData.selectedMate!, fromChatView: true)
                         .navigationBarBackButtonHidden()
@@ -120,4 +123,5 @@ struct ChatView: View {
 
 #Preview {
     ChatView()
+        .environmentObject(ChatAppearanceViewModel())
 }

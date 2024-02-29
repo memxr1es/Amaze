@@ -11,6 +11,12 @@ struct ChangeAppInfoView: View {
    
     @State private var selectedLanguage: AppLanguage = .russian
     
+    @State private var selectedBGColor = Color.theme.bgColor
+    @State private var selectedPhotoColor = Color.black
+    @State private var selectedBackgroundImage = ""
+    
+    @State private var showReset: Bool = false
+    
     @State private var stateOfPush: [PushNotifications: Bool] = [
         .newRequests: false,
         .newMatch: false,
@@ -22,6 +28,9 @@ struct ChangeAppInfoView: View {
     @Binding var path: [String]
     
     @EnvironmentObject var sections: SectionsViewModel
+    @EnvironmentObject var chatVM: ChatAppearanceViewModel
+    
+    @Environment(\.dismiss) private var dismiss
     
     private func binding(for item: PushNotifications) -> Binding<Bool> {
         return .init(
@@ -37,6 +46,8 @@ struct ChangeAppInfoView: View {
                 logInMethods
             case .notifications:
                 pushNotification
+            case .chats:
+                chatAppearance
             case .language:
                 appLanguage
             case .blackList:
@@ -49,10 +60,25 @@ struct ChangeAppInfoView: View {
                 faq
             }
         }
-        .padding(.top, 80)
+        .padding(.top, sections.selectedAppSection == .chats ? 65 : 80)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(Color.theme.bgColor)
         .overlay(header)
+        .onAppear {
+            selectedBGColor = chatVM.selectedColorBackground
+            selectedPhotoColor = chatVM.selectedColorPhoto
+            selectedBackgroundImage = chatVM.selectedBackgroundImage
+        }
+        .onChange(of: [selectedBGColor, selectedPhotoColor]) { oldValue, newValue in
+            if selectedBGColor != chatVM.systemBGColor || selectedPhotoColor != chatVM.selectedColorPhoto || selectedBackgroundImage != chatVM.systemBGImage {
+                withAnimation(.linear) { showReset = true }
+            }
+        }
+        .onChange(of: selectedBackgroundImage) { oldValue, newValue in
+            if selectedBGColor != chatVM.systemBGColor || selectedPhotoColor != chatVM.selectedColorPhoto || selectedBackgroundImage != chatVM.systemBGImage {
+                withAnimation(.linear) { showReset = true }
+            }
+        }
     }
     
     var header: some View {
@@ -71,10 +97,22 @@ struct ChangeAppInfoView: View {
             Text(sections.selectedAppSection == .notifications ? "Push-уведомления" : (sections.selectedAppSection == .language ? "Язык приложения" : sections.selectedAppSection.rawValue))
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(.black)
-                .padding(.leading, -20)
+                .padding(.leading, sections.selectedAppSection == .chats ? 20 : -20)
                 .opacity(sections.selectedAppSection == .FAQ ? 0 : 1)
             
             Spacer()
+            
+            if sections.selectedAppSection == .chats {
+                Image(systemName: "arrow.clockwise")
+                    .font(.system(size: 16))
+                    .foregroundStyle(.black)
+                    .rotationEffect(.degrees(showReset ? 0 : 180))
+                    .padding(.trailing)
+                    .opacity(showReset ? 1 : 0)
+                    .onTapGesture {
+                        reset()
+                    }
+            }
         }
         .padding(.top, 10)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -253,8 +291,123 @@ struct ChangeAppInfoView: View {
         .padding(.horizontal)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
+    
+    var chatAppearance: some View {
+        VStack(spacing: 5) {
+            LazyVStack(spacing: 10) {
+                Text("Кастомизируй чат под себя!")
+                    .font(.system(size: 22, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.black)
+                
+                Text("Вся красота видна только тебе. \nНе переживай если будет кринжово ;)")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.black.opacity(0.4))
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(5)
+            }
+            
+            VStack(alignment: .leading) {
+                Text("Фон чата")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(.black.opacity(0.6))
+                    .padding(.horizontal)
+                
+                    WallpaperCarousel(tempBGColor: $selectedBGColor, tempPhotoColor: $selectedPhotoColor, tempBGImage: $selectedBackgroundImage)
+                        .environmentObject(chatVM)
+                        .frame(height: 250)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 10)
+            .background(.white)
+            .padding(.top, 20)
+            
+            LazyVStack(alignment: .leading) {
+                Text("Настройка цвета")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(.black.opacity(0.6))
+                    .padding(.horizontal)
+                
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text("Цвет фона")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.black.opacity(0.5))
+                        
+                        Spacer()
+                        
+                        CustomColorPicker(backColor: true, tempBGColor: $selectedBGColor, tempPhotoColor: $selectedPhotoColor)
+                            .environmentObject(chatVM)
+                    }
+                    
+                    Rectangle()
+                        .fill(.black.opacity(0.1))
+                        .frame(height: 0.5)
+                        .padding(.vertical, 5)
+                    
+                    HStack {
+                        Text("Цвет рисунка")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.black.opacity(0.5))
+                        
+                        Spacer()
+                        
+                        CustomColorPicker(backColor: false, tempBGColor: $selectedBGColor, tempPhotoColor: $selectedPhotoColor)
+                            .environmentObject(chatVM)
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 10)
+            .background(.white)
+            .padding(.top, 10)
+            
+            Button {
+                saveSettings()
+            } label: {
+                Text("Сохранить")
+                    .font(.system(size: 16))
+                    .foregroundStyle(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background {
+                        RoundedRectangle(cornerRadius: 30)
+                            .fill(.black)
+                    }
+            }
+            .padding(.horizontal)
+            .padding(.top, 15)
+        }
+    }
+    
+    func saveSettings() {
+        chatVM.selectedColorPhoto = selectedPhotoColor
+        chatVM.selectedColorBackground = selectedBGColor
+        chatVM.selectedBackgroundImage = selectedBackgroundImage
+        
+        dismiss()
+    }
+    
+    func reset() {
+        if selectedBGColor != chatVM.systemBGColor || selectedPhotoColor != chatVM.selectedColorPhoto || selectedBackgroundImage != chatVM.systemBGImage {
+            withAnimation {
+                
+                selectedBGColor = chatVM.systemBGColor
+                selectedPhotoColor = chatVM.selectedColorPhoto
+                selectedBackgroundImage = chatVM.systemBGImage
+                
+            }
+        }
+        
+        withAnimation(.linear) {
+            showReset.toggle()
+        }
+    }
 }
 
 #Preview {
-    MainView()
+    ChangeAppInfoView(path: .constant([]))
+        .environmentObject(SectionsViewModel())
+        .environmentObject(ChatAppearanceViewModel())
 }
