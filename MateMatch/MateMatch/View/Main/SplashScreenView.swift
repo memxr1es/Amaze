@@ -12,6 +12,7 @@ struct SplashScreenView: View {
     
     @State private var firstAnimation: Bool = false
     @State private var secondAnimation: Bool = false
+    @State private var helpAnimation: Bool = false
     @State private var startFadeoutAnimation: Bool = false
     
     var body: some View {
@@ -40,9 +41,10 @@ struct SplashScreenView: View {
     private var background: some View {
         LinearGradient(
             colors: [Color(#colorLiteral(red: 0.01106899139, green: 0.03459626809, blue: 0.03383141011, alpha: 1)), Color.theme.mainColor],
-            startPoint: .bottom,
-            endPoint: .top
+            startPoint: secondAnimation ? .top : .bottom,
+            endPoint: secondAnimation ? .bottom : .top
         )
+        .opacity(helpAnimation ? 0 : 1)
         .ignoresSafeArea()
     }
     
@@ -56,6 +58,10 @@ struct SplashScreenView: View {
                         self.firstAnimation = false
                         self.secondAnimation = true
                         startFadeoutAnimation = true
+                    }
+                    
+                    withAnimation(.linear(duration: 1.15)) {
+                        self.helpAnimation = true
                     }
                 }
             case .finished:

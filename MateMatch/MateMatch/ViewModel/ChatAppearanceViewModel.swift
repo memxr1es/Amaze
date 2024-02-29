@@ -17,8 +17,15 @@ class ChatAppearanceViewModel: ObservableObject {
     
     @Published var selectedColorBackground: Color = Color.theme.bgColor
     @Published var selectedColorPhoto: Color = Color.black.opacity(0.05)
+    @Published var selectedMessageColor = Color.blue
+    
+    @Published var selectedTempBGColor = Color.theme.bgColor
+    @Published var selectedTempPhotoColor = Color.black
+    @Published var selectedTempMessageColor = Color.blue
+    @Published var selectedTempBackgroundImage = ""
     
     let systemBGImage = "pattern-1"
     let systemBGColor = Color.theme.bgColor
     let systemPhotoColor = Color.black.opacity(0.05)
+    let systemMessageColor = Color.blue
 }

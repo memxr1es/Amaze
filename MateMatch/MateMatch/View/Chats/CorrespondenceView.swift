@@ -39,6 +39,7 @@ struct CorrespondenceView: View {
         .padding(.top, 60)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background {
+            Color.white
             chatVM.selectedColorBackground
             
             Image(chatVM.selectedBackgroundImage)

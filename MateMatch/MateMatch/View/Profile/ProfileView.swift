@@ -128,6 +128,10 @@ struct ProfileView: View {
                     .navigationBarBackButtonHidden()
                     .environmentObject(sections)
                     .environmentObject(chatVM)
+            } else if navPath == "Preview Chat" {
+                PreviewChatView(mate: plchldr_mate, selectedBGColor: chatVM.selectedTempBGColor, selectedPhotoColor: chatVM.selectedTempPhotoColor, selectedBackgroundImage: chatVM.selectedTempBackgroundImage, selectedMessageColor: chatVM.selectedTempMessageColor)
+                    .navigationBarBackButtonHidden()
+                
             } else if navPath == "Main Section" {
                 ChangeMainInfoView(path: $path)
                     .navigationBarBackButtonHidden()
