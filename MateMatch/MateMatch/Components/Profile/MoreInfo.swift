@@ -58,23 +58,24 @@ struct MoreInfo: View {
                             } else {
                                 Button {
                                     switch category {
-                                    case .verification: return
-                                    case .morePhoto: withAnimation {
-                                        userVM.showPhoto.toggle()
-                                        showSheet = true
-                                    }
-                                    case .bio: withAnimation {
-                                        userVM.showBio.toggle()
-                                        showSheet = true
-                                    }
-                                    case .status: withAnimation {
-                                        userVM.showStatus.toggle()
-                                        showSheet = true
-                                    }
-                                    case .addInformation: withAnimation {
-                                        userVM.showInfo.toggle()
-                                        showSheet = true
-                                    }
+                                        case .verification: return
+                                        case .morePhoto: withAnimation {
+                                            userVM.showPhoto.toggle()
+                                            showSheet = true
+                                        }
+                                        case .bio: withAnimation {
+                                            userVM.showBio.toggle()
+                                            showSheet = true
+                                        }
+                                        case .status: withAnimation {
+                                            userVM.showStatus.toggle()
+                                            showSheet = true
+                                        }
+                                        case .addInformation: withAnimation {
+                                            userVM.showInfo.toggle()
+                                            userVM.selectedInfoSection = "Город"
+                                            showSheet = true
+                                        }
                                     }
                                 } label: {
                                     HStack {
@@ -170,23 +171,24 @@ struct MoreInfo: View {
                             } else {
                                 Button {
                                     switch category {
-                                    case .verification: return
-                                    case .morePhoto: withAnimation {
-                                        userVM.showPhoto.toggle()
-                                        showSheet = true
-                                    }
-                                    case .bio: withAnimation {
-                                        userVM.showBio.toggle()
-                                        showSheet = true
-                                    }
-                                    case .status: withAnimation {
-                                        userVM.showStatus.toggle()
-                                        showSheet = true
-                                    }
-                                    case .addInformation: withAnimation {
-                                        userVM.showInfo.toggle()
-                                        showSheet = true
-                                    }
+                                        case .verification: return
+                                        case .morePhoto: withAnimation {
+                                            userVM.showPhoto.toggle()
+                                            showSheet = true
+                                        }
+                                        case .bio: withAnimation {
+                                            userVM.showBio.toggle()
+                                            showSheet = true
+                                        }
+                                        case .status: withAnimation {
+                                            userVM.showStatus.toggle()
+                                            showSheet = true
+                                        }
+                                        case .addInformation: withAnimation {
+                                            userVM.showInfo.toggle()
+                                            userVM.selectedInfoSection = "Город"
+                                            showSheet = true
+                                        }
                                     }
                                 } label: {
                                     HStack {
@@ -242,6 +244,7 @@ struct MoreInfo: View {
 
 #Preview {
     MoreInfo(showSheet: .constant(false))
+        .environmentObject(UserViewModel())
 }
 
 enum Category: String, CaseIterable {

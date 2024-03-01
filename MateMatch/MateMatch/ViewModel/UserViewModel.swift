@@ -16,6 +16,7 @@ class UserViewModel: ObservableObject {
     @Published var showBio: Bool = false
     @Published var showStatus: Bool = false
     @Published var showInfo: Bool = false
+    @Published var selectedInfoSection = ""
     
     @Published var valueOfSection: [String: Int] = [:]
     @Published var fillCompleteValue: CGFloat = .zero

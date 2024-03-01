@@ -29,7 +29,7 @@ struct OverviewProfileView: View {
                     bio
                 }
                 
-                if userVM.user.game != nil {
+                if !userVM.user.game!.isEmpty {
                     games
                 }
             }

@@ -17,3 +17,13 @@ func shortDate(_ date: Date) -> String {
     
     return formattedDate
 }
+
+func declesions(_ count: Int) -> String {
+    switch count {
+        case 1: return "игра"
+        case 2...4: return "игры"
+        case 5...6: return "игр"
+            
+        default: return "игр"
+    }
+}

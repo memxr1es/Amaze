@@ -90,13 +90,13 @@ struct ProfileView: View {
                 .frame(maxHeight: .infinity, alignment: .top)
         }
         .sheet(isPresented: $showSheet, content: {
-            ChangeInfo()
-                .environmentObject(userVM)
-                .presentationDetents([.height(userVM.showPhoto ? 520 : (userVM.showStatus ? 590 : (userVM.showInfo ? 300 : 340)))])
-                .padding(.top, 40)
-                .padding(.bottom, 25)
-                .presentationCornerRadius(20)
-                .background(.white)
+                ChangeInfo()
+                    .environmentObject(userVM)
+                    .presentationDetents([.height(userVM.showPhoto ? 520 : (userVM.showStatus ? 590 : (userVM.showInfo ? 560 : 340)))])
+                    .padding(.top, 40)
+                    .padding(.bottom, 20)
+                    .presentationCornerRadius(20)
+                    .background(.white)
         })
         .background(Color.theme.bgColor)
         .overlay {

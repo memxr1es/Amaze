@@ -56,19 +56,20 @@ struct EditProfileView: View {
                 .environmentObject(userVM)
                 .presentationDetents([.fraction(0.8)])
         }
-        .sheet(isPresented: $userVM.showInfo) {
-            ChangeInfo()
-                .environmentObject(userVM)
-                .presentationDetents([.height(300)])
-                .padding(.top, 40)
-                .padding(.bottom, 25)
-                .presentationCornerRadius(20)
-                .background(.white)
-        }
         .navigationBarTitleDisplayMode(.inline)
         .overlay {
             customNavBar
         }
+        .disabled(userVM.showPhoto)
+        .sheet(isPresented: $userVM.showInfo, content: {
+            ChangeInfo()
+                .environmentObject(userVM)
+                .presentationDetents([.height(560)])
+                .padding(.top, 40)
+                .padding(.bottom, 15)
+                .presentationCornerRadius(20)
+                .background(.white)
+        })
         .background(Color.theme.bgColor.opacity(0.3))
         .background(Color.white)
         .onAppear {
@@ -120,7 +121,7 @@ struct EditProfileView: View {
             ZStack(alignment: .leading) {
                 if userVM.user.about.isEmpty {
                     TextEditor(text: $placeholder)
-                        .font(.system(size: 20, design: .rounded))
+                        .font(.system(size: 16, design: .rounded))
                         .foregroundStyle(.gray)
                         .disabled(true)
                         .padding(5)
@@ -129,7 +130,7 @@ struct EditProfileView: View {
                 }
                 
                 TextEditor(text: $userVM.user.about)
-                    .font(.system(size: 20, design: .rounded))
+                    .font(.system(size: 16, design: .rounded))
                     .foregroundStyle(.black)
                     .opacity(userVM.user.about.isEmpty ? 0.25 : 1)
                     .padding(5)
@@ -289,23 +290,63 @@ struct EditProfileView: View {
             }
             .padding()
             
-            LazyVGrid(columns: columns) {
-                Image(systemName: "network")
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(.gray)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Город")
-                        .foregroundStyle(.black)
-                        .fontDesign(.rounded)
-                    
-                    Text(userVM.user.city != nil ? userVM.user.city! : "Не выбрано")
+            VStack(spacing: 30) {
+                LazyVGrid(columns: columns) {
+                    Image(systemName: "network")
+                        .font(.system(size: 22, weight: .semibold))
                         .foregroundStyle(.gray)
-                        .fontDesign(.rounded)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Город")
+                            .foregroundStyle(.black)
+                            .fontDesign(.rounded)
+                        
+                        Text(userVM.user.city != nil ? userVM.user.city! : "Не выбрано")
+                            .font(.system(size: 14))
+                            .foregroundStyle(.black.opacity(0.3))
+                            .fontDesign(.rounded)
+                    }
+                    
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(.gray)
+                }
+                .onTapGesture {
+                    withAnimation {
+                        userVM.selectedInfoSection = "Город"
+                        userVM.showInfo = true
+                    }
                 }
                 
-                Image(systemName: "chevron.right")
-                    .foregroundStyle(.gray)
+                LazyVGrid(columns: columns) {
+                    Image(systemName: "gamecontroller")
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundStyle(.gray)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Игры")
+                            .foregroundStyle(.black)
+                            .fontDesign(.rounded)
+                        HStack {
+                            if userVM.user.game != nil {
+                                Text("Выбрано: \(userVM.user.game!.count) \(declesions(userVM.user.game!.count))")
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(.black.opacity(0.3))
+                                    .fontDesign(.rounded)
+                            }
+                        }
+                        .lineLimit(1)
+                    }
+                    
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(.gray)
+                }
+
+                .onTapGesture {
+                    withAnimation {
+                        userVM.selectedInfoSection = "Игры"
+                        userVM.showInfo = true
+                    }
+                }
             }
             .padding()
             .background {
@@ -316,9 +357,6 @@ struct EditProfileView: View {
                     .shadow(color: Color.theme.bgColor.opacity(0.3), radius: 10)
             }
             .padding(.horizontal, 15)
-            .onTapGesture {
-                userVM.showInfo = true
-            }
         }
     }
     
@@ -411,6 +449,7 @@ struct WithoutEffectsButtonStyle: ButtonStyle {
 }
 
 #Preview {
-    MainView()
+    EditProfileView(path: .constant([]))
+        .environmentObject(UserViewModel())
 }
 
