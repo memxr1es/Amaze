@@ -14,9 +14,6 @@ struct SettingsView: View {
     @EnvironmentObject var sections: SectionsViewModel
     @EnvironmentObject var userVM: UserViewModel
     
-//    @StateObject var sections = SectionsViewModel()
-//    @StateObject var userVM = UserViewModel()
-    
     @State private var showFeedback: Bool = false
     @State private var showExit: Bool = false
     
@@ -268,6 +265,8 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView(path: .constant([]))
+        .environmentObject(SectionsViewModel())
+        .environmentObject(UserViewModel())
 }
 
 

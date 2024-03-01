@@ -50,8 +50,13 @@ struct ProfileView: View {
     
     @StateObject var sections = SectionsViewModel()
     @EnvironmentObject var userVM: UserViewModel
+    @EnvironmentObject var chatVM: ChatAppearanceViewModel
 
     @Binding var path: [String]
+    
+    private func timeConsumingCalculation() -> Int {
+        (1 ... 10_000_000).reduce(0, +)
+    }
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -60,7 +65,7 @@ struct ProfileView: View {
                 Color.theme.bgColor.ignoresSafeArea()
                 
                 
-                VStack(spacing: 5) {
+                LazyVStack(spacing: 5) {
                     
                     profileSection
                     
@@ -85,13 +90,13 @@ struct ProfileView: View {
                 .frame(maxHeight: .infinity, alignment: .top)
         }
         .sheet(isPresented: $showSheet, content: {
-            ChangeInfo()
-                .environmentObject(userVM)
-                .presentationDetents([.height(userVM.showPhoto ? 520 : (userVM.showStatus ? 590 : (userVM.showInfo ? 300 : 340)))])
-                .padding(.top, 40)
-                .padding(.bottom, 25)
-                .presentationCornerRadius(20)
-                .background(.white)
+                ChangeInfo()
+                    .environmentObject(userVM)
+                    .presentationDetents([.height(userVM.showPhoto ? 520 : (userVM.showStatus ? 590 : (userVM.showInfo ? 560 : 340)))])
+                    .padding(.top, 40)
+                    .padding(.bottom, 20)
+                    .presentationCornerRadius(20)
+                    .background(.white)
         })
         .background(Color.theme.bgColor)
         .overlay {
@@ -122,6 +127,11 @@ struct ProfileView: View {
                 ChangeAppInfoView(path: $path)
                     .navigationBarBackButtonHidden()
                     .environmentObject(sections)
+                    .environmentObject(chatVM)
+            } else if navPath == "Preview Chat" {
+                PreviewChatView(mate: plchldr_mate, selectedBGColor: chatVM.selectedTempBGColor, selectedPhotoColor: chatVM.selectedTempPhotoColor, selectedBackgroundImage: chatVM.selectedTempBackgroundImage, selectedMessageColor: chatVM.selectedTempMessageColor)
+                    .navigationBarBackButtonHidden()
+                
             } else if navPath == "Main Section" {
                 ChangeMainInfoView(path: $path)
                     .navigationBarBackButtonHidden()
@@ -145,15 +155,17 @@ struct ProfileView: View {
                     .environmentObject(userVM)
             }
         }
-        .onAppear {
+        .task {
             withAnimation {
                 userVM.fillCompleted()
                 circleValue = userVM.fillCompleteValue
             }
         }
         .onChange(of: userVM.user) { oldValue, newValue in
-            userVM.fillCompleted()
-            circleValue = userVM.fillCompleteValue
+            DispatchQueue.main.async {
+                userVM.fillCompleted()
+                circleValue = userVM.fillCompleteValue
+            }
         }
     }
     
@@ -182,7 +194,7 @@ struct ProfileView: View {
     }
     
     var profileSection: some View {
-        VStack {
+        LazyVStack {
             NavigationLink(value: "Profile Overview") {
                 HStack(spacing: 15) {
                     Image("user-avatar")
@@ -192,7 +204,7 @@ struct ProfileView: View {
                         .clipShape(Circle())
                     
                     
-                    VStack(alignment: .leading, spacing: 5) {
+                    LazyVStack(alignment: .leading, spacing: 5) {
                         HStack {
                             Text(userVM.user.firstName)
                                 .font(.system(size: 26, weight: .semibold, design: .rounded))
@@ -216,7 +228,7 @@ struct ProfileView: View {
                 .padding(.top)
             }
             
-            HStack {
+            LazyHStack {
                 buttonProfile(icon: "pencil.and.scribble", text: "Изменить", alignment: false)
                 
                 Spacer()
@@ -235,7 +247,7 @@ struct ProfileView: View {
     }
     
     var fillProfile: some View {
-        VStack {
+        LazyVStack {
             HStack {
                 ZStack {
                     CircularProgressView(value: circleValue)
@@ -283,8 +295,8 @@ struct ProfileView: View {
     }
     
     var checkCompatibility: some View {
-        VStack(spacing: 15) {
-            HStack(spacing: 20) {
+        LazyVStack(spacing: 15) {
+            LazyHStack(spacing: 20) {
                 VStack(alignment: .leading, spacing: 5) {
                     Text("Что общего?")
                         .font(.system(size: 20, weight: .semibold, design: .rounded))
@@ -402,4 +414,5 @@ struct ProfileView: View {
 
 #Preview {
     MainView()
+        .environmentObject(LaunchScreenStateManager())
 }

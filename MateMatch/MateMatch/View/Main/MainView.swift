@@ -18,6 +18,9 @@ struct MainView: View {
     
     @StateObject private var cardData = CardsViewModel()
     @StateObject private var userVM = UserViewModel()
+    @StateObject private var chatVM = ChatAppearanceViewModel()
+    
+    @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -25,18 +28,17 @@ struct MainView: View {
                 ZStack {
                     switchViews(selectedTab: selectedTab, showParametersSheet: showParametersSheet)
                         .transition(.scale(scale: 1.1))
+                        .navigationDestination(for: String.self) { navPath in
+                            if navPath == "Notifications" {
+                                NotificationView()
+                                    .navigationBarBackButtonHidden()
+                                    .environmentObject(userVM)
+                            }
+                        }
                     TabBar(selectedTab: $selectedTab)
                         .frame(height: 10)
-//                        .padding(.bottom, 10)
                         .background(.white)
                         .frame(maxHeight: .infinity, alignment: .bottom)
-                }
-                .navigationDestination(for: String.self) { navPath in
-                    if navPath == "Notifications" {
-                        NotificationView()
-                            .navigationBarBackButtonHidden()
-                            .environmentObject(userVM)
-                    }
                 }
             }
             .padding(.bottom, 20)
@@ -55,8 +57,21 @@ struct MainView: View {
         .overlay(sheet)
         .overlay {
             if cardData.showMateProfile {
-                MateOverviewView(mate: cardData.selectedMate!)
+                MateOverviewView(mate: cardData.selectedMate!, fromChatView: false)
                     .environmentObject(cardData)
+            }
+        }
+        .task {
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                self.selectedTab = .profile
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.selectedTab = .main
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.launchScreenState.dismiss()
             }
         }
     }
@@ -82,13 +97,16 @@ struct MainView: View {
                 EmptyView()
             case .message:
                 ChatView()
+                .environmentObject(chatVM)
             case .profile:
                 ProfileView(path: $navigationPath)
                 .environmentObject(userVM)
+                .environmentObject(chatVM)
         }
     }
 }
 
 #Preview {
     MainView()
+        .environmentObject(LaunchScreenStateManager())
 }

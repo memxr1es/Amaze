@@ -18,6 +18,11 @@
 		650422572B7DE55C0044CA9D /* MoreInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650422562B7DE55C0044CA9D /* MoreInfo.swift */; };
 		6510376D2B875A1B003D329C /* OverviewProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6510376C2B875A1B003D329C /* OverviewProfileView.swift */; };
 		6510376F2B8771F2003D329C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6510376E2B8771F2003D329C /* Assets.xcassets */; };
+		65188EDE2B908AAE00997AA1 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65188EDD2B908AAE00997AA1 /* SplashScreenView.swift */; };
+		65188EE02B908E9200997AA1 /* LaunchScreenStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65188EDF2B908E9200997AA1 /* LaunchScreenStateManager.swift */; };
+		65188EE42B90985E00997AA1 /* ChatAppearanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65188EE32B90985E00997AA1 /* ChatAppearanceViewModel.swift */; };
+		65188EE62B909B9600997AA1 /* WallpaperCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65188EE52B909B9600997AA1 /* WallpaperCarousel.swift */; };
+		65188EE82B90A15800997AA1 /* CustomColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65188EE72B90A15800997AA1 /* CustomColorPicker.swift */; };
 		652C403D2B7F2F780036849F /* PremiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C403C2B7F2F780036849F /* PremiumView.swift */; };
 		652C403F2B7F68BC0036849F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C403E2B7F68BC0036849F /* SettingsView.swift */; };
 		652C40412B7F7CB30036849F /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C40402B7F7CB30036849F /* Functions.swift */; };
@@ -35,6 +40,8 @@
 		653F9C0D2B85D06100B6409D /* SectionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653F9C0C2B85D06100B6409D /* SectionsViewModel.swift */; };
 		6543B65F2B75FB3100FF4BC5 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6543B65E2B75FB3100FF4BC5 /* ProfileView.swift */; };
 		6543B6612B764DE900FF4BC5 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6543B6602B764DE900FF4BC5 /* QRCodeView.swift */; };
+		654629232B90E345004D5FD3 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654629222B90E345004D5FD3 /* MessageBubble.swift */; };
+		654629252B90E60E004D5FD3 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654629242B90E60E004D5FD3 /* RoundedCorner.swift */; };
 		655B04112B861668004F9657 /* SectionsEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655B04102B861668004F9657 /* SectionsEnums.swift */; };
 		655B04132B861E76004F9657 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655B04122B861E76004F9657 /* UserViewModel.swift */; };
 		655FB4392B6B75BA002EB72B /* FlexibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655FB4382B6B75BA002EB72B /* FlexibleView.swift */; };
@@ -46,6 +53,7 @@
 		65644FAE2B8A38A20005BDC6 /* MateOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65644FAD2B8A38A20005BDC6 /* MateOverviewView.swift */; };
 		6568A1DF2B7760F700B147AE /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6568A1DE2B7760F700B147AE /* Color.swift */; };
 		6568A1E32B77731500B147AE /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6568A1E22B77731500B147AE /* EditProfileView.swift */; };
+		6573B0312B8F4B2E005CE46E /* CorrespondenceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6573B0302B8F4B2E005CE46E /* CorrespondenceView.swift */; };
 		658062B92B6B619900CA2999 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658062B82B6B619900CA2999 /* Tag.swift */; };
 		6582F4522B8DB48600B241EF /* ChangeInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582F4512B8DB48600B241EF /* ChangeInfo.swift */; };
 		658A41152B68C2FB0062EF82 /* MateMatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A41142B68C2FB0062EF82 /* MateMatchApp.swift */; };
@@ -79,6 +87,11 @@
 		650422562B7DE55C0044CA9D /* MoreInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreInfo.swift; sourceTree = "<group>"; };
 		6510376C2B875A1B003D329C /* OverviewProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewProfileView.swift; sourceTree = "<group>"; };
 		6510376E2B8771F2003D329C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		65188EDD2B908AAE00997AA1 /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
+		65188EDF2B908E9200997AA1 /* LaunchScreenStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenStateManager.swift; sourceTree = "<group>"; };
+		65188EE32B90985E00997AA1 /* ChatAppearanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAppearanceViewModel.swift; sourceTree = "<group>"; };
+		65188EE52B909B9600997AA1 /* WallpaperCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCarousel.swift; sourceTree = "<group>"; };
+		65188EE72B90A15800997AA1 /* CustomColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColorPicker.swift; sourceTree = "<group>"; };
 		652C403C2B7F2F780036849F /* PremiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumView.swift; sourceTree = "<group>"; };
 		652C403E2B7F68BC0036849F /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		652C40402B7F7CB30036849F /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
@@ -96,6 +109,8 @@
 		653F9C0C2B85D06100B6409D /* SectionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionsViewModel.swift; sourceTree = "<group>"; };
 		6543B65E2B75FB3100FF4BC5 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		6543B6602B764DE900FF4BC5 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		654629222B90E345004D5FD3 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
+		654629242B90E60E004D5FD3 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		655B04102B861668004F9657 /* SectionsEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionsEnums.swift; sourceTree = "<group>"; };
 		655B04122B861E76004F9657 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		655FB4382B6B75BA002EB72B /* FlexibleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleView.swift; sourceTree = "<group>"; };
@@ -107,6 +122,7 @@
 		65644FAD2B8A38A20005BDC6 /* MateOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MateOverviewView.swift; sourceTree = "<group>"; };
 		6568A1DE2B7760F700B147AE /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		6568A1E22B77731500B147AE /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		6573B0302B8F4B2E005CE46E /* CorrespondenceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CorrespondenceView.swift; sourceTree = "<group>"; };
 		658062B82B6B619900CA2999 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		6582F4512B8DB48600B241EF /* ChangeInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeInfo.swift; sourceTree = "<group>"; };
 		658A41112B68C2FB0062EF82 /* MateMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MateMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -180,6 +196,8 @@
 				652C40492B832DE00036849F /* PayAttention.swift */,
 				652C404E2B83603E0036849F /* CarouselCalendar.swift */,
 				6582F4512B8DB48600B241EF /* ChangeInfo.swift */,
+				65188EE52B909B9600997AA1 /* WallpaperCarousel.swift */,
+				65188EE72B90A15800997AA1 /* CustomColorPicker.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -189,6 +207,7 @@
 			children = (
 				65B9BF6A2B6F96FC00850A56 /* MatchedMateView.swift */,
 				65B9BF6F2B6F9DDE00850A56 /* MessageView.swift */,
+				654629222B90E345004D5FD3 /* MessageBubble.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -298,6 +317,7 @@
 				655FB4412B6B8E50002EB72B /* CardsViewModel.swift */,
 				653F9C0C2B85D06100B6409D /* SectionsViewModel.swift */,
 				655B04122B861E76004F9657 /* UserViewModel.swift */,
+				65188EE32B90985E00997AA1 /* ChatAppearanceViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -345,6 +365,7 @@
 			children = (
 				658A41162B68C2FB0062EF82 /* MainView.swift */,
 				6537E8F72B8E025700EEA1AE /* NotificationView.swift */,
+				65188EDD2B908AAE00997AA1 /* SplashScreenView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -353,6 +374,8 @@
 			isa = PBXGroup;
 			children = (
 				65B7736C2B8BA1B20083F28C /* OffsetReader.swift */,
+				65188EDF2B908E9200997AA1 /* LaunchScreenStateManager.swift */,
+				654629242B90E60E004D5FD3 /* RoundedCorner.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -361,6 +384,7 @@
 			isa = PBXGroup;
 			children = (
 				65B9BF6D2B6F994F00850A56 /* ChatView.swift */,
+				6573B0302B8F4B2E005CE46E /* CorrespondenceView.swift */,
 			);
 			path = Chats;
 			sourceTree = "<group>";
@@ -471,20 +495,27 @@
 				6504224B2B7A0BD30044CA9D /* InfoChoice.swift in Sources */,
 				658A41292B68C33B0062EF82 /* MenuTab.swift in Sources */,
 				65B7736D2B8BA1B20083F28C /* OffsetReader.swift in Sources */,
+				65188EE82B90A15800997AA1 /* CustomColorPicker.swift in Sources */,
+				65188EE42B90985E00997AA1 /* ChatAppearanceViewModel.swift in Sources */,
 				6537E8F62B8E00B800EEA1AE /* NavController.swift in Sources */,
 				650422492B79F0C20044CA9D /* User.swift in Sources */,
 				658A41172B68C2FB0062EF82 /* MainView.swift in Sources */,
 				652C40452B7FBE150036849F /* PremiumCarouselView.swift in Sources */,
 				655FB4392B6B75BA002EB72B /* FlexibleView.swift in Sources */,
 				6568A1E32B77731500B147AE /* EditProfileView.swift in Sources */,
+				65188EE62B909B9600997AA1 /* WallpaperCarousel.swift in Sources */,
 				658A41312B6918EC0062EF82 /* UserTag.swift in Sources */,
 				65B9BF6B2B6F96FC00850A56 /* MatchedMateView.swift in Sources */,
+				654629232B90E345004D5FD3 /* MessageBubble.swift in Sources */,
 				6582F4522B8DB48600B241EF /* ChangeInfo.swift in Sources */,
 				650422452B78B4550044CA9D /* PhotoProfile.swift in Sources */,
 				658A41152B68C2FB0062EF82 /* MateMatchApp.swift in Sources */,
+				65188EDE2B908AAE00997AA1 /* SplashScreenView.swift in Sources */,
+				6573B0312B8F4B2E005CE46E /* CorrespondenceView.swift in Sources */,
 				6543B6612B764DE900FF4BC5 /* QRCodeView.swift in Sources */,
 				658A412D2B68C45F0062EF82 /* TabItem.swift in Sources */,
 				653F9C0D2B85D06100B6409D /* SectionsViewModel.swift in Sources */,
+				654629252B90E60E004D5FD3 /* RoundedCorner.swift in Sources */,
 				65B9BF692B6F933800850A56 /* FeedbackMenu.swift in Sources */,
 				65B9BF702B6F9DDE00850A56 /* MessageView.swift in Sources */,
 				65B9BF6E2B6F994F00850A56 /* ChatView.swift in Sources */,
@@ -506,6 +537,7 @@
 				655FB4402B6B86AA002EB72B /* CardView.swift in Sources */,
 				652C40412B7F7CB30036849F /* Functions.swift in Sources */,
 				650422522B7B2FFD0044CA9D /* VerificationSecondStepView.swift in Sources */,
+				65188EE02B908E9200997AA1 /* LaunchScreenStateManager.swift in Sources */,
 				655FB43D2B6B8362002EB72B /* Mate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -644,6 +676,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Amaze;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -674,6 +707,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Amaze;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

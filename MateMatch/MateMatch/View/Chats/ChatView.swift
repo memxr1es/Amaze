@@ -10,68 +10,94 @@ import SwiftUI
 struct ChatView: View {
     
     @StateObject var cardData = CardsViewModel()
+    @EnvironmentObject private var chatVM: ChatAppearanceViewModel
+    
+    @State private var navigationPath: [String] = []
     
     var body: some View {
-        VStack {
+        NavigationStack(path: $navigationPath) {
             VStack {
-                if let mates = cardData.displaying_mates {
-                    
-                    if mates.isEmpty {
-                        
-                    } else {
-                        
-                        newMatesHeader
-                        
-                        ScrollView(.horizontal) {
-                            HStack(spacing: 25) {
-                                ForEach(mates, id: \.self) { mateMatch in
-                                    MatchedMateView(mate: mateMatch)
-                                }
-                            }
-                            .padding(.horizontal, 15)
-                        }
-                        .scrollIndicators(.hidden)
-                    }
-                }
-                
-                VStack(alignment: .leading) {
-                    Text("Чаты")
-                        .font(.system(size: 26, weight: .semibold, design: .rounded))
-                        .foregroundStyle(.black)
-                    
+                VStack {
                     if let mates = cardData.displaying_mates {
                         
                         if mates.isEmpty {
                             
                         } else {
                             
-                            List {
-                                ForEach(mates, id: \.self) { mateMatch in
-                                    MessageView(mate: mateMatch)
-                                        .listRowInsets(EdgeInsets(top: 0, leading: -5, bottom: 15, trailing: -5))
-                                        .listRowSeparator(.hidden)
-                                        .overlay {
-                                            Rectangle()
-                                                .fill(.gray.opacity(0.2))
-                                                .frame(height: 0.5)
-                                                .offset(y: 50)
-                                        }
+                            newMatesHeader
+                            
+                            ScrollView(.horizontal) {
+                                HStack(spacing: 25) {
+                                    ForEach(mates, id: \.self) { mateMatch in
+                                        MatchedMateView(mate: mateMatch)
+                                            .onTapGesture {
+                                                navigationPath.append("Correspondence View")
+                                                cardData.selectedMate = mateMatch
+                                            }
+                                    }
                                 }
-                                .listRowBackground(Rectangle().fill(.white))
+                                .padding(.horizontal, 15)
                             }
-                            .listStyle(.plain)
                             .scrollIndicators(.hidden)
                         }
                     }
+                    
+                    VStack(alignment: .leading) {
+                        Text("Чаты")
+                            .font(.system(size: 26, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.black)
+                        
+                        if let mates = cardData.displaying_mates {
+                            
+                            if mates.isEmpty {
+                                
+                            } else {
+                                
+                                List {
+                                    ForEach(mates, id: \.self) { mateMatch in
+                                        MessageView(mate: mateMatch)
+                                            .listRowInsets(EdgeInsets(top: 0, leading: -5, bottom: 15, trailing: -5))
+                                            .listRowSeparator(.hidden)
+                                            .overlay {
+                                                Rectangle()
+                                                    .fill(.gray.opacity(0.2))
+                                                    .frame(height: 0.5)
+                                                    .offset(y: 50)
+                                            }
+                                            .onTapGesture {
+                                                navigationPath.append("Correspondence View")
+                                                cardData.selectedMate = mateMatch
+                                            }
+                                    }
+                                    .listRowBackground(Rectangle().fill(.white))
+                                }
+                                .listStyle(.plain)
+                                .scrollIndicators(.hidden)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding()
+                
+                Spacer()
             }
-            
-            Spacer()
+            .ignoresSafeArea(edges: .bottom)
+            .background(Color.white.ignoresSafeArea())
+            .navigationDestination(for: String.self) { navPath in
+                if navPath == "Correspondence View" {
+                    CorrespondenceView(mate: cardData.selectedMate!, path: $navigationPath)
+                        .navigationBarBackButtonHidden()
+                        .environmentObject(cardData)
+                        .environmentObject(chatVM)
+                    
+                } else if navPath == "Mate Profile" {
+                    MateOverviewView(mate: cardData.selectedMate!, fromChatView: true)
+                        .navigationBarBackButtonHidden()
+                        .environmentObject(cardData)
+                }
+            }
         }
-        .ignoresSafeArea(edges: .bottom)
-        .background(Color.white.ignoresSafeArea())
     }
     
     var newMatesHeader: some View {
@@ -97,4 +123,5 @@ struct ChatView: View {
 
 #Preview {
     ChatView()
+        .environmentObject(ChatAppearanceViewModel())
 }
