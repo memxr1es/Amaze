@@ -9,37 +9,36 @@ import SwiftUI
 
 struct ChatView: View {
     
-    @StateObject var cardData = CardsViewModel()
+    @EnvironmentObject private var cardData: CardsViewModel
     @EnvironmentObject private var chatVM: ChatAppearanceViewModel
+    @EnvironmentObject private var sectionsVM: SectionsViewModel
     
     @State private var navigationPath: [String] = []
+    @State private var arrayOfDictionary: Array<Dictionary<Mate, [Message]>.Keys.Element> = []
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack {
                 VStack {
-                    if let mates = cardData.displaying_mates {
+                    if cardData.matched_mates.isEmpty {
+
+                    } else {
+                        newMatesHeader
                         
-                        if mates.isEmpty {
-                            
-                        } else {
-                            
-                            newMatesHeader
-                            
-                            ScrollView(.horizontal) {
-                                HStack(spacing: 25) {
-                                    ForEach(mates, id: \.self) { mateMatch in
-                                        MatchedMateView(mate: mateMatch)
-                                            .onTapGesture {
-                                                navigationPath.append("Correspondence View")
-                                                cardData.selectedMate = mateMatch
-                                            }
-                                    }
+                        ScrollView(.horizontal) {
+                            HStack(spacing: 25) {
+                                ForEach(Array(cardData.matched_mates.keys), id: \.self) { mateMatch in
+                                    MatchedMateView(mate: mateMatch)
+                                        .onTapGesture {
+                                            navigationPath.removeAll()
+                                            cardData.selectedMate = mateMatch
+                                            navigationPath.append("Correspondence View")
+                                        }
                                 }
-                                .padding(.horizontal, 15)
                             }
-                            .scrollIndicators(.hidden)
+                            .padding(.horizontal, 15)
                         }
+                        .scrollIndicators(.hidden)
                     }
                     
                     VStack(alignment: .leading) {
@@ -47,37 +46,46 @@ struct ChatView: View {
                             .font(.system(size: 26, weight: .semibold, design: .rounded))
                             .foregroundStyle(.black)
                         
-                        if let mates = cardData.displaying_mates {
-                            
-                            if mates.isEmpty {
-                                
-                            } else {
-                                
-                                List {
-                                    ForEach(mates, id: \.self) { mateMatch in
-                                        MessageView(mate: mateMatch)
-                                            .listRowInsets(EdgeInsets(top: 0, leading: -5, bottom: 15, trailing: -5))
-                                            .listRowSeparator(.hidden)
-                                            .overlay {
-                                                Rectangle()
-                                                    .fill(.gray.opacity(0.2))
-                                                    .frame(height: 0.5)
-                                                    .offset(y: 50)
-                                            }
-                                            .onTapGesture {
-                                                navigationPath.append("Correspondence View")
-                                                cardData.selectedMate = mateMatch
-                                            }
-                                    }
-                                    .listRowBackground(Rectangle().fill(.white))
+                        List {
+                            ForEach(Array(cardData.matched_mates.keys), id: \.self) { mateMatch in
+                                if !cardData.matched_mates[mateMatch]!.isEmpty {
+                                    MessageView(mate: mateMatch, path: $navigationPath)
+                                        .environmentObject(cardData)
+                                        .listRowInsets(EdgeInsets(top: 0, leading: -5, bottom: 15, trailing: -5))
+                                        .listRowSeparator(.hidden)
+                                        .overlay {
+                                            Rectangle()
+                                                .fill(.gray.opacity(0.2))
+                                                .frame(height: 0.5)
+                                                .offset(y: 50)
+                                        }
+                                        .listRowBackground(Rectangle().fill(.white))
                                 }
-                                .listStyle(.plain)
-                                .scrollIndicators(.hidden)
                             }
                         }
+                        .listStyle(.plain)
+                        .scrollIndicators(.hidden)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                     .padding()
+                    .overlay {
+                        if cardData.matched_mates.isEmpty {
+                            VStack(spacing: 10) {
+                                Text("Пу-пу-пу...")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundStyle(.black.opacity(0.5))
+                                
+                                Text("Как дела, Солнце?")
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(.black.opacity(0.2))
+                                    .multilineTextAlignment(.center)
+                                    .lineSpacing(5)
+                            }
+                            .padding()
+                            .padding(.vertical)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                        }
+                    }
                 }
                 
                 Spacer()
@@ -90,11 +98,20 @@ struct ChatView: View {
                         .navigationBarBackButtonHidden()
                         .environmentObject(cardData)
                         .environmentObject(chatVM)
-                    
+                        .environmentObject(sectionsVM)
                 } else if navPath == "Mate Profile" {
                     MateOverviewView(mate: cardData.selectedMate!, fromChatView: true)
                         .navigationBarBackButtonHidden()
                         .environmentObject(cardData)
+                } else if navPath == "Application Section" {
+                    ChangeAppInfoView(path: $navigationPath)
+                        .navigationBarBackButtonHidden()
+                        .environmentObject(sectionsVM)
+                        .environmentObject(chatVM)
+                } else if navPath == "Preview Chat" {
+                    PreviewChatView(mate: plchldr_mate, selectedBGColor: chatVM.selectedTempBGColor, selectedPhotoColor: chatVM.selectedTempPhotoColor, selectedBackgroundImage: chatVM.selectedTempBackgroundImage, selectedMessageColor: chatVM.selectedTempMessageColor, path: $navigationPath)
+                        .navigationBarBackButtonHidden()
+                        .environmentObject(chatVM)
                 }
             }
         }
@@ -124,4 +141,5 @@ struct ChatView: View {
 #Preview {
     ChatView()
         .environmentObject(ChatAppearanceViewModel())
+        .environmentObject(CardsViewModel())
 }

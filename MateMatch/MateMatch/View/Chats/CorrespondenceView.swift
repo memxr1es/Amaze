@@ -9,12 +9,12 @@ import SwiftUI
 
 struct CorrespondenceView: View {
     
-    let mate: Mate
+    @State var mate: Mate
     
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var cardData: CardsViewModel
     @EnvironmentObject private var chatVM: ChatAppearanceViewModel
-//    @StateObject private var cardData: CardsViewModel = CardsViewModel()
+    @EnvironmentObject private var sectionsVM: SectionsViewModel
     
     @State private var randomHour: Int = 0
     @State private var randomMin: Int = 0
@@ -27,9 +27,23 @@ struct CorrespondenceView: View {
     
     var body: some View {
         VStack {
-            ScrollView {
-                
+            GeometryReader { proxy in
+                ScrollView {
+                    VStack {
+                        Spacer()
+                        
+                        if cardData.matched_mates[mate] != nil {
+                            ForEach(cardData.matched_mates[mate]!, id: \.self) { message in
+                                MessageBubble(fromUser: message.fromUser, message: message.text, time: timeDate(message.time))
+                                    .environmentObject(chatVM)
+                            }
+                        }
+                    }
+                    .padding(.bottom)
+                    .frame(minHeight: proxy.size.height)
+                }
             }
+            .scrollBounceBehavior(.basedOnSize, axes: .vertical)
             .onTapGesture {
                 isFocused = false
             }
@@ -85,7 +99,15 @@ struct CorrespondenceView: View {
             Spacer()
             Spacer()
             Spacer()
-            Spacer()
+            
+            Image(systemName: "sparkles")
+                .font(.system(size: 16))
+                .foregroundStyle(.black.opacity(0.6))
+                .padding(.trailing, 25)
+                .onTapGesture {
+                    sectionsVM.selectedAppSection = .chats
+                    path.append("Application Section")
+                }
         }
         .padding(.top, 5)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -152,7 +174,7 @@ struct CorrespondenceView: View {
                 .focused($isFocused)
                 
                 Button {
-                    
+                    sendMessage()
                 } label: {
                     Image("arrowhead")
                         .resizable()
@@ -178,10 +200,18 @@ struct CorrespondenceView: View {
         .background(.white)
         .animation(isFocused ? .none : .easeOut(duration: 0.9), value: isFocused)
     }
+    
+    func sendMessage() {
+        if !message.isEmpty {
+            cardData.sendMessage(mate: mate, message: message)
+            message = ""
+        }
+    }
 }
 
 #Preview {
     CorrespondenceView(mate: MOCK_MATE[0], path: .constant([]))
         .environmentObject(CardsViewModel())
         .environmentObject(ChatAppearanceViewModel())
+        .environmentObject(SectionsViewModel())
 }

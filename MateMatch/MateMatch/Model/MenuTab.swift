@@ -14,16 +14,29 @@ enum MenuTab: String, CaseIterable {
     case message
     case profile
     
-    var icon: String {
+    var icon_out: String {
         switch self {
         case .main:
-            return "heart.circle.fill"
+            return "a_out"
         case .overview:
-            return "sparkle.magnifyingglass"
+            return "heart_out"
         case .message:
-            return "bubble.left.and.bubble.right.fill"
+            return "chat_out"
         case .profile:
-            return "person.circle.fill"
+            return "person_out"
+        }
+    }
+    
+    var icon_fill: String {
+        switch self {
+        case .main:
+            return "a_fill"
+        case .overview:
+            return "heart_fill"
+        case .message:
+            return "chat_fill"
+        case .profile:
+            return "person_fill"
         }
     }
     

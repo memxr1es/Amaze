@@ -460,7 +460,7 @@ let plchldr_mate = Mate(name: "Влад", age: 23, avatar: [Photo(name: "plchldr
         .environmentObject(SectionsViewModel())
         .environmentObject(ChatAppearanceViewModel())
     
-//    PreviewChatView(mate: plchldr_mate, selectedBGColor: .white, selectedPhotoColor: .red, selectedBackgroundImage: "pattern-1")
+//    PreviewChatView(mate: plchldr_mate, selectedBGColor: .white, selectedPhotoColor: .red, selectedBackgroundImage: "pattern-1", selectedMessageColor: Color.theme.bgColor)
 }
 
 struct PreviewChatView: View {
@@ -481,6 +481,8 @@ struct PreviewChatView: View {
     
     @State private var message: String = ""
     
+    @Binding var path: [String]
+    
     var body: some View {
         VStack {
             GeometryReader { reader in
@@ -488,9 +490,9 @@ struct PreviewChatView: View {
                     VStack {
                         Spacer()
                         
-                        MessageBubble(fromUser: true, message: "Здарова Влад, сядем сегодня в дотку в 19?", time: "12:31", messageColor: selectedMessageColor)
-                        MessageBubble(fromUser: false, message: "Здарова, смогу только после 8и 🥲", time: "12:45", messageColor: selectedMessageColor)
-                        MessageBubble(fromUser: true, message: "Оки, до вечера тогда", time: "13:01", messageColor: selectedMessageColor)
+                        MessageBubble(fromUser: true, message: "Здарова Влад, сядем сегодня в дотку в 19?", time: "12:31")
+                        MessageBubble(fromUser: false, message: "Здарова, смогу только после 8и 🥲", time: "12:45")
+                        MessageBubble(fromUser: true, message: "Оки, до вечера тогда", time: "13:01")
                     }
                     .padding(.bottom)
                     .frame(minHeight: reader.size.height)
@@ -518,6 +520,9 @@ struct PreviewChatView: View {
         .onAppear {
             self.randomHour = .random(in: 1...24)
             self.randomMin = .random(in: 10...59)
+        }
+        .onDisappear {
+            path.removeAll(where: { $0 == "Preview Chat" })
         }
     }
     

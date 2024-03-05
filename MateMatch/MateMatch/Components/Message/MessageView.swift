@@ -11,14 +11,12 @@ struct MessageView: View {
     
     let mate: Mate
     
-    @State private var randomHour: Int
-    @State private var randomMin: Int
+    @State private var randomHour: Int = 0
+    @State private var randomMin: Int = 0
     
-    init(mate: Mate) {
-        self.mate = mate
-        randomHour = .random(in: 1...24)
-        randomMin = .random(in: 10...59)
-    }
+    @Binding var path: [String]
+    
+    @EnvironmentObject var cardData: CardsViewModel
     
     var body: some View {
         HStack(spacing: 15) {
@@ -42,7 +40,7 @@ struct MessageView: View {
                     Spacer()
                     
                     HStack(spacing: 5) {
-                        Text("\(randomHour):\(randomMin)")
+                        Text(timeDate(cardData.matched_mates[mate]?.last?.time ?? Date()))
                             .font(.system(size: 14))
                             .foregroundStyle(.black.opacity(0.4))
                         
@@ -55,19 +53,28 @@ struct MessageView: View {
 //                    .padding(.horizontal)
                 }
                 
-                Text("Oh yeah, малыш (Малыш), I’m perfect (Perfect), Я слышал somebody get hurt (Get hurt), They wish me dead, no coffin (Coffin), I stick to the hate, they giving me profit (My life), Living my life, this shit so perfect, Grabbin' that bag and manifest options, (Yeah, yeah, yeah, yeah, Я-я, я-я)")
+                Text(cardData.matched_mates[mate]?.last?.text ?? "")
                     .font(.system(size: 16))
                     .foregroundStyle(.gray)
                     .lineLimit(2)
-                    .frame(maxWidth: UIScreen.main.bounds.width - 110)
+                    .frame(maxWidth: UIScreen.main.bounds.width - 110, alignment: .leading)
             }
 //            .frame(width: .infinity, height: 70)
         }
         .padding(5)
         .background(.white)
+        .onTapGesture {
+            path.removeAll()
+            cardData.selectedMate = mate
+            path.append("Correspondence View")
+        }
+        .onAppear {
+            randomHour = .random(in: 1...24)
+            randomMin = .random(in: 10...59)
+        }
     }
 }
 
 #Preview {
-    MessageView(mate: MOCK_MATE[1])
+    MessageView(mate: MOCK_MATE[1], path: .constant([]))
 }

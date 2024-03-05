@@ -129,9 +129,9 @@ struct ProfileView: View {
                     .environmentObject(sections)
                     .environmentObject(chatVM)
             } else if navPath == "Preview Chat" {
-                PreviewChatView(mate: plchldr_mate, selectedBGColor: chatVM.selectedTempBGColor, selectedPhotoColor: chatVM.selectedTempPhotoColor, selectedBackgroundImage: chatVM.selectedTempBackgroundImage, selectedMessageColor: chatVM.selectedTempMessageColor)
+                PreviewChatView(mate: plchldr_mate, selectedBGColor: chatVM.selectedTempBGColor, selectedPhotoColor: chatVM.selectedTempPhotoColor, selectedBackgroundImage: chatVM.selectedTempBackgroundImage, selectedMessageColor: chatVM.selectedTempMessageColor, path: $path)
                     .navigationBarBackButtonHidden()
-                
+                    .environmentObject(chatVM)
             } else if navPath == "Main Section" {
                 ChangeMainInfoView(path: $path)
                     .navigationBarBackButtonHidden()

@@ -8,7 +8,7 @@
 import Foundation
 
 class UserViewModel: ObservableObject {
-    @Published var user = User(firstName: "Никита", userPhoto: ["user-avatar", "nikita", "nikita-2"], age: 21, birthDay: Date.now, gender: .male, about: "Есть что-то во мне особенное...", isVerified: false, city: "Рязань", game: [.apexLegends, .backrooms, .dota, .minecraft], purpose: .fun)
+    @Published var user = User(firstName: "Никита", userPhoto: ["user-avatar", "nikita-2"], age: 21, birthDay: Date.now, gender: .male, about: "Есть что-то во мне особенное...", isVerified: false, city: "Рязань", game: [.apexLegends, .backrooms, .dota, .minecraft], purpose: .fun)
     
     @Published var completed: [String: Bool] = [:]
     

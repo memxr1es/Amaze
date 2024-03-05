@@ -236,4 +236,5 @@ struct OverviewProfileView: View {
 
 #Preview {
     OverviewProfileView(path: .constant([]))
+        .environmentObject(UserViewModel())
 }

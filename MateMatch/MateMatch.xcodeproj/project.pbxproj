@@ -34,6 +34,9 @@
 		652C404F2B83603E0036849F /* CarouselCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C404E2B83603E0036849F /* CarouselCalendar.swift */; };
 		652C40512B8497CB0036849F /* ChangeAppInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C40502B8497CB0036849F /* ChangeAppInfoView.swift */; };
 		652C40542B84C8D70036849F /* FAQView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652C40532B84C8D70036849F /* FAQView.swift */; };
+		652D11642B959690003DDAFA /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652D11632B959690003DDAFA /* Message.swift */; };
+		652D11672B95E554003DDAFA /* PotentialMatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652D11662B95E554003DDAFA /* PotentialMatchView.swift */; };
+		652D116A2B95F11C003DDAFA /* PotentialMateCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652D11692B95F11C003DDAFA /* PotentialMateCard.swift */; };
 		6537E8F62B8E00B800EEA1AE /* NavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6537E8F52B8E00B800EEA1AE /* NavController.swift */; };
 		6537E8F82B8E025700EEA1AE /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6537E8F72B8E025700EEA1AE /* NotificationView.swift */; };
 		653F9C0B2B85D04700B6409D /* SectionDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653F9C0A2B85D04700B6409D /* SectionDataModel.swift */; };
@@ -103,6 +106,9 @@
 		652C404E2B83603E0036849F /* CarouselCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselCalendar.swift; sourceTree = "<group>"; };
 		652C40502B8497CB0036849F /* ChangeAppInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeAppInfoView.swift; sourceTree = "<group>"; };
 		652C40532B84C8D70036849F /* FAQView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQView.swift; sourceTree = "<group>"; };
+		652D11632B959690003DDAFA /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		652D11662B95E554003DDAFA /* PotentialMatchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotentialMatchView.swift; sourceTree = "<group>"; };
+		652D11692B95F11C003DDAFA /* PotentialMateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotentialMateCard.swift; sourceTree = "<group>"; };
 		6537E8F52B8E00B800EEA1AE /* NavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavController.swift; sourceTree = "<group>"; };
 		6537E8F72B8E025700EEA1AE /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		653F9C0A2B85D04700B6409D /* SectionDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionDataModel.swift; sourceTree = "<group>"; };
@@ -232,6 +238,22 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		652D11652B95E53B003DDAFA /* Likes */ = {
+			isa = PBXGroup;
+			children = (
+				652D11662B95E554003DDAFA /* PotentialMatchView.swift */,
+			);
+			path = Likes;
+			sourceTree = "<group>";
+		};
+		652D11682B95F10C003DDAFA /* Likes */ = {
+			isa = PBXGroup;
+			children = (
+				652D11692B95F11C003DDAFA /* PotentialMateCard.swift */,
+			);
+			path = Likes;
+			sourceTree = "<group>";
+		};
 		6543B65D2B75FB2700FF4BC5 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -302,6 +324,7 @@
 		658A41222B68C30E0062EF82 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				652D11652B95E53B003DDAFA /* Likes */,
 				6543B65D2B75FB2700FF4BC5 /* Profile */,
 				65B9BF6C2B6F992200850A56 /* Chats */,
 				655FB43E2B6B86A1002EB72B /* CardView */,
@@ -331,6 +354,7 @@
 				650422482B79F0C10044CA9D /* User.swift */,
 				653F9C0A2B85D04700B6409D /* SectionDataModel.swift */,
 				655B04102B861668004F9657 /* SectionsEnums.swift */,
+				652D11632B959690003DDAFA /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -349,6 +373,7 @@
 		658A41262B68C3210062EF82 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				652D11682B95F10C003DDAFA /* Likes */,
 				6504225B2B7DE5920044CA9D /* Message */,
 				6504225A2B7DE5890044CA9D /* Profile */,
 				650422592B7DE56A0044CA9D /* Main */,
@@ -475,6 +500,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				652D116A2B95F11C003DDAFA /* PotentialMateCard.swift in Sources */,
 				650422472B78C15F0044CA9D /* CompositionalView.swift in Sources */,
 				650422572B7DE55C0044CA9D /* MoreInfo.swift in Sources */,
 				652C403D2B7F2F780036849F /* PremiumView.swift in Sources */,
@@ -497,6 +523,7 @@
 				65B7736D2B8BA1B20083F28C /* OffsetReader.swift in Sources */,
 				65188EE82B90A15800997AA1 /* CustomColorPicker.swift in Sources */,
 				65188EE42B90985E00997AA1 /* ChatAppearanceViewModel.swift in Sources */,
+				652D11642B959690003DDAFA /* Message.swift in Sources */,
 				6537E8F62B8E00B800EEA1AE /* NavController.swift in Sources */,
 				650422492B79F0C20044CA9D /* User.swift in Sources */,
 				658A41172B68C2FB0062EF82 /* MainView.swift in Sources */,
@@ -531,6 +558,7 @@
 				655FB4422B6B8E50002EB72B /* CardsViewModel.swift in Sources */,
 				652C40512B8497CB0036849F /* ChangeAppInfoView.swift in Sources */,
 				65B9BF792B7220BF00850A56 /* GenderChoice.swift in Sources */,
+				652D11672B95E554003DDAFA /* PotentialMatchView.swift in Sources */,
 				650422502B7A3CC40044CA9D /* VerificationView.swift in Sources */,
 				652C404A2B832DE00036849F /* PayAttention.swift in Sources */,
 				6537E8F82B8E025700EEA1AE /* NotificationView.swift in Sources */,
@@ -669,6 +697,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MateMatch/Preview Content\"";
@@ -680,6 +709,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = SplashScreenView;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -700,6 +730,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MateMatch/Preview Content\"";
@@ -711,6 +742,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = SplashScreenView;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

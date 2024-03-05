@@ -176,13 +176,23 @@ struct MateCard: View {
         .padding(.top, 20)
     }
     
+    func mateLike() {
+        cardData.liked_mates.append(mateInfo)
+    }
+    
+    func mateDislike() {
+        cardData.disliked_mates.append(mateInfo)
+    }
+    
     func swipeCard(width: CGFloat) {
         switch width {
             case -500...(-150):
                 endSwipeActions()
+                mateDislike()
                 self.width = -500
             case 150...500:
                 endSwipeActions()
+                mateLike()
                 self.width = 500
             default:
                 self.width = .zero
@@ -218,9 +228,9 @@ struct MateCard: View {
         withAnimation(.none) {swipeEnd = true}
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            if let _ = cardData.displaying_mates?.first {
+            if let _ = cardData.displaying_mates.first {
                 let _ = withAnimation {
-                    cardData.displaying_mates?.removeFirst()
+                    cardData.displaying_mates.removeFirst()
                 }
             }
         }

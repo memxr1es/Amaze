@@ -21,22 +21,18 @@ struct CardView: View {
             
             header
             
-            if let mates = cardData.displaying_mates {
-                
-                if mates.isEmpty {
+            if cardData.displaying_mates.isEmpty {
                     Text("Возвращайся позже, мы подберем тебе еще напарников!")
                         .font(.caption)
                         .foregroundStyle(.gray)
                         .padding(.top, 60)
-                } else {
-                    ForEach(mates.reversed(), id: \.self) { mate in
-                        StackCardView(mate: mate)
-                            .environmentObject(cardData)
-                    }
-                    .padding(.top, 60)
+            }
+            else {
+                ForEach(cardData.displaying_mates.reversed(), id: \.self) { mate in
+                    StackCardView(mate: mate)
+                        .environmentObject(cardData)
                 }
-            } else {
-                ProgressView()
+                .padding(.top, 60)
             }
         }
     }

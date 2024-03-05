@@ -13,7 +13,7 @@ struct MessageBubble: View {
     let message: String
     let time: String
     
-    let messageColor: Color
+    @EnvironmentObject var chatVM: ChatAppearanceViewModel
     
     var body: some View {
         if fromUser {
@@ -38,7 +38,7 @@ struct MessageBubble: View {
             .padding(5)
             .background {
                 Rectangle()
-                    .fill(messageColor.gradient)
+                    .fill(chatVM.selectedMessageColor.gradient)
                     .cornerRadius(20, corners: [.topLeft, .topRight, .bottomLeft])
             }
             .frame(maxWidth: UIScreen.main.bounds.width - 100, alignment: .trailing)

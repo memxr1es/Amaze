@@ -21,6 +21,7 @@ struct TabBar: View {
             ForEach(MenuTab.allCases, id: \.self) { item in
                 TabItem(tab: item, selectedTab: $selectedTab)
                     .padding(.top, 20)
+                    .padding(.horizontal, 5)
             }
         }
         .frame(maxWidth: .infinity)
@@ -34,5 +35,6 @@ struct TabBar: View {
 }
 
 #Preview {
-    TabBar(selectedTab: .constant(.main))
+    MainView()
+        .environmentObject(LaunchScreenStateManager())
 }

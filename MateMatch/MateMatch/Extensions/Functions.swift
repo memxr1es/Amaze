@@ -18,6 +18,17 @@ func shortDate(_ date: Date) -> String {
     return formattedDate
 }
 
+func timeDate(_ date: Date) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.locale = Locale(identifier: "ru_RU")
+    dateFormatter.dateFormat = "HH:mm"
+
+    
+    let formattedDate = dateFormatter.string(from: date)
+    
+    return formattedDate
+}
+
 func declesions(_ count: Int) -> String {
     switch count {
         case 1: return "игра"

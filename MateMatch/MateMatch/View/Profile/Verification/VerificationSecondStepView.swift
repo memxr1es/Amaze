@@ -152,7 +152,8 @@ struct VerificationSecondStepView: View {
     
     var buttonNotNow: some View {
         Button {
-            path.removeAll(where: { ($0 == "Final Step" || $0 == "First Step") })
+            path.removeAll(where: { $0 == "First Step" || $0 == "Final Step"})
+//            dismiss()
         } label: {
             Text("Не сейчас")
                 .font(.system(size: 18, design: .rounded))

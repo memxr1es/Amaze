@@ -19,6 +19,7 @@ struct MainView: View {
     @StateObject private var cardData = CardsViewModel()
     @StateObject private var userVM = UserViewModel()
     @StateObject private var chatVM = ChatAppearanceViewModel()
+    @StateObject private var sectionsVM = SectionsViewModel()
     
     @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
     
@@ -35,6 +36,7 @@ struct MainView: View {
                                     .environmentObject(userVM)
                             }
                         }
+                    
                     TabBar(selectedTab: $selectedTab)
                         .frame(height: 10)
                         .background(.white)
@@ -94,10 +96,13 @@ struct MainView: View {
                 .environmentObject(cardData)
                 .padding(.bottom, 20)
             case .overview:
-                EmptyView()
+                PotentialMatchView(selectedTab: $selectedTab)
+                .environmentObject(cardData)
             case .message:
                 ChatView()
                 .environmentObject(chatVM)
+                .environmentObject(sectionsVM)
+                .environmentObject(cardData)
             case .profile:
                 ProfileView(path: $navigationPath)
                 .environmentObject(userVM)

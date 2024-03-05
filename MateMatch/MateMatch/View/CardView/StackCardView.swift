@@ -50,4 +50,5 @@ struct StackCardView: View {
 
 #Preview {
     StackCardView(mate: MOCK_MATE[1])
+        .environmentObject(CardsViewModel())
 }

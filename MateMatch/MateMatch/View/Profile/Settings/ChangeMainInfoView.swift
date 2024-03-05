@@ -247,12 +247,15 @@ struct ChangeMainInfoView: View {
             switch sections.selectedSection {
                 case .name:
                     userVM.user.firstName = newValue
+                    path.removeAll(where: { $0 == "Main Section" })
                     print("ready#1")
                 case .birthday: 
                     userVM.user.birthDay = newValueDate
+                    path.removeAll(where: { $0 == "Main Section" })
                     print("ready#2")
                 case .gender: 
                     userVM.user.gender = selectedGender
+                    path.removeAll(where: { $0 == "Main Section" })
                     print("ready#3")
             }
             
@@ -263,7 +266,14 @@ struct ChangeMainInfoView: View {
                 .foregroundStyle(.white)
                 .padding()
         }
-        .buttonStyle(ConfirmButton(isDisabled: .constant(!(isToggled && !newValue.isEmpty))))
+        .disabled(!isToggled || newValue.isEmpty)
+        .frame(maxWidth: .infinity)
+        .background {
+            RoundedRectangle(cornerRadius: 30)
+                .fill(!isToggled || newValue.isEmpty ? .black.opacity(0.5) : .black)
+        }
+        .padding(.horizontal)
+        .padding(.top)
     }
 }
 
@@ -305,5 +315,7 @@ struct ConfirmButton: PrimitiveButtonStyle {
 }
 
 #Preview {
-    MainView()
+    ChangeMainInfoView(path: .constant([]))
+        .environmentObject(UserViewModel())
+        .environmentObject(SectionsViewModel())
 }
